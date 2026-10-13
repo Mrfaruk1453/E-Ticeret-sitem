@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Yardım Merkezi - MultiShop</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="E-Ticaret Yardım, Kargo Takibi, İade, Ödeme Destek" name="keywords">
+    <meta content="MultiShop Yardım Merkezi: Sipariş, kargo, ödeme ve iade süreçleriyle ilgili tüm destek konuları." name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="container-fluid">
+        <div class="row bg-secondary py-2 px-xl-5 align-items-center">
+            <div class="col-lg-7 d-none d-lg-block">
+                <div class="d-inline-flex align-items-center">
+                    <a href="/hakkinda.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
+                        <img src="img/icon-hakkinda.png" alt="Hakkında" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Hakkında</span>
+                    </a>
+                    <a href="/contact.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
+                        <img src="img/icon-temas.png" alt="Temas etmek" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Temas etmek</span>
+                    </a>
+                    <a href="/yardim.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
+                        <img src="img/icon-yardim.png" alt="Yardım" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Yardım</span>
+                    </a>
+                    <a href="/sss.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none">
+                        <img src="img/icon-sss.png" alt="Sıkça Sorulan Sorular" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Sıkça Sorulan Sorular</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    <a href="/cart.html" class="btn btn-sm btn-primary font-weight-bold">
+                        <i class="fa fa-shopping-cart mr-1"></i> Sepetim (<span class="cart-badge">0</span>)
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+            <div class="col-lg-4">
+                <a href="/index.html" class="text-decoration-none">
+                    <span class="h1 text-uppercase text-primary bg-dark px-2">Multi</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+                </a>
+            </div>
+            <div class="col-lg-4 col-6 text-left">
+                <form class="header-search-form" action="/shop.html" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Ürün, kategori veya yardım ara...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-6 text-right">
+                <p class="m-0 text-muted">Müşteri Hizmetleri</p>
+                <h5 class="m-0 font-weight-bold text-dark">+90 (212) 345 67 89</h5>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-dark mb-30">
+        <div class="row px-xl-5">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+                    <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Kategoriler</h6>
+                    <i class="fa fa-angle-down text-dark"></i>
+                </a>
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
+                    <div class="navbar-nav w-100">
+                        <div class="nav-item dropdown dropright">
+                            <a href="/shop.html?category=elbiseler" class="nav-link dropdown-toggle" data-toggle="dropdown">Elbiseler <i class="fa fa-angle-right float-right mt-1"></i></a>
+                            <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+                                <a href="/shop.html?category=elbiseler&search=erkek" class="dropdown-item">Erkek Elbiseleri</a>
+                                <a href="/shop.html?category=elbiseler&search=kadin" class="dropdown-item">Kadın Elbiseleri</a>
+                                <a href="/shop.html?category=elbiseler&search=bebek" class="dropdown-item">Bebek Elbiseleri & Ürünleri</a>
+                            </div>
+                        </div>
+                        <a href="/shop.html?category=gomlekler" class="nav-item nav-link">Gömlekler</a>
+                        <a href="/shop.html?category=kot" class="nav-item nav-link">Kot</a>
+                        <a href="/shop.html?category=mayo" class="nav-item nav-link">Mayo</a>
+                        <a href="/shop.html?category=uyku-kiyafetleri" class="nav-item nav-link">Uyku kıyafetleri</a>
+                        <a href="/shop.html?category=spor-giyim" class="nav-item nav-link">Spor giyim</a>
+                        <a href="/shop.html?category=tulumlar" class="nav-item nav-link">Tulumlar</a>
+                        <a href="/shop.html?category=blazerler" class="nav-item nav-link">Blazerler</a>
+                        <a href="/shop.html?category=ceketler" class="nav-item nav-link">Ceketler</a>
+                        <a href="/shop.html?category=ayakkabi" class="nav-item nav-link">Ayakkabı</a>
+                        <a href="/shop.html?category=kamera" class="nav-item nav-link">Kamera</a>
+                        <a href="/shop.html?category=kozmetik" class="nav-item nav-link">Kozmetik</a>
+                    </div>
+                </nav>
+            </div>
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                    <a href="/index.html" class="text-decoration-none d-block d-lg-none">
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="/index.html" class="nav-item nav-link">Anasayfa</a>
+                            <a href="/shop.html" class="nav-item nav-link">Mağaza & Katalog</a>
+                            <a href="/cart.html" class="nav-item nav-link">Sepetim</a>
+                            <a href="/checkout.html" class="nav-item nav-link">Ödeme (Sandbox)</a>
+                            <a href="/contact.html" class="nav-item nav-link">Temas etmek</a>
+                        </div>
+                        <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                            <a href="/cart.html" class="btn px-0 ml-3">
+                                <i class="fas fa-shopping-cart text-primary"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle cart-badge" style="padding-bottom: 2px;">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/index.html">Anasayfa</a>
+                    <span class="breadcrumb-item active">Yardım</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Help Section Start -->
+    <div class="container-fluid pt-2 pb-5">
+        <div class="row px-xl-5">
+            <div class="col-12 mb-4 text-center">
+                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                    <span class="bg-secondary pr-3 font-weight-bold">Yardım ve Destek Merkezi</span>
+                </h2>
+                <p class="text-muted" style="max-width: 700px; margin: 0 auto;">
+                    Siparişleriniz, kargo teslimat süreçleri, iade ve güvenli ödeme işlemleriyle ilgili ihtiyacınız olan tüm bilgilere bu sayfadan ulaşabilirsiniz.
+                </p>
+            </div>
+        </div>
+
+        <div class="row px-xl-5">
+            <!-- 1. Kargo & Teslimat -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-shipping-fast text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">Kargo ve Teslimat</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Hafta içi saat 15:00'e kadar onaylanan siparişleriniz aynı gün kargoya teslim edilir. 500 TL ve üzeri tüm alışverişlerinizde kargo tamamen ücretsizdir.
+                    </p>
+                    <ul class="text-muted small pl-3 mb-0">
+                        <li>Standart teslimat süresi: 1-3 iş günü</li>
+                        <li>Kargo takip numarası siparişiniz kargolandığında SMS ve e-posta ile iletilir</li>
+                        <li>Anlaşmalı kargo firmaları ile Türkiye'nin 81 iline teslimat</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. İade & Değişim -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-exchange-alt text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">İade ve Değişim</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Teslim aldığınız ürünü, teslimat tarihinden itibaren 14 gün içerisinde herhangi bir gerekçe göstermeksizin ücretsiz olarak iade edebilirsiniz.
+                    </p>
+                    <ul class="text-muted small pl-3 mb-0">
+                        <li>14 gün koşulsuz iade hakkı</li>
+                        <li>Kullanılmamış ve etiketi sökülmemiş ürünler için geçerlidir</li>
+                        <li>İade onaylandığında tutar 2-5 iş günü içinde kartınıza geri yansıtılır</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3. Ödeme & Güvenlik -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-lock text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">Güvenli Ödeme</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Tüm ödemeleriniz 256-bit SSL güvenlik sertifikası ve 3D Secure güvencesiyle korunur. Kart bilgileriniz sunucularımızda asla saklanmaz.
+                    </p>
+                    <ul class="text-muted small pl-3 mb-0">
+                        <li>Visa, MasterCard, Troy kredi ve banka kartları</li>
+                        <li>Sandbox test ortamında anında provizyon</li>
+                        <li>Kupon indirimleri sepet aşamasında anında uygulanır</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. Sipariş Takibi -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-box-open text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">Sipariş Durum Akışı</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Siparişiniz 9 adımlı durum makinesi ile adım adım izlenir:
+                    </p>
+                    <div class="small text-muted">
+                        <span class="badge badge-success mr-1">ÖDENDİ</span> &rarr; 
+                        <span class="badge badge-info mr-1">HAZIRLANIYOR</span> &rarr; 
+                        <span class="badge badge-primary mr-1">KARGOLANDI</span> &rarr; 
+                        <span class="badge badge-dark">TESLİM EDİLDİ</span>
+                    </div>
+                    <p class="text-muted small mt-2 mb-0">
+                        Her aşamada e-posta adresinize bilgilendirme iletilir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 5. İndirim Kuponları -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-tags text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">Kupon Kullanımı</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Sepet sayfasında "Kupon Kodu" alanına aktif kuponunuzu yazıp uygulayabilirsiniz:
+                    </p>
+                    <ul class="text-muted small pl-3 mb-0">
+                        <li><code>HOSGELDIN10</code>: 250 TL üzeri alışverişlerde %10 indirim</li>
+                        <li><code>BAHAR50</code>: 500 TL üzeri alışverişlerde 50 TL net indirim</li>
+                        <li><code>OGRENCI20</code>: 300 TL üzeri alışverişlerde %20 öğrenci indirimi</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 6. Canlı Destek & İletişim -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="bg-light p-4 h-100 shadow-sm" style="border-radius: 6px; border-top: 4px solid #ffd333;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-headset text-primary fa-2x mr-3"></i>
+                        <h5 class="font-weight-bold m-0">Müşteri Desteği</h5>
+                    </div>
+                    <p class="text-muted small">
+                        Sorularınız ve önerileriniz için müşteri temsilcilerimize haftanın 7 günü ulaşabilirsiniz:
+                    </p>
+                    <p class="small text-muted mb-1"><i class="fa fa-envelope text-primary mr-2"></i>info@multishop.com</p>
+                    <p class="small text-muted mb-3"><i class="fa fa-phone text-primary mr-2"></i>+90 (212) 345 67 89</p>
+                    <a href="/contact.html" class="btn btn-sm btn-primary font-weight-bold"><i class="fa fa-paper-plane mr-1"></i> İletişim Formuna Git</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hızlı Yönlendirme Şeridi -->
+        <div class="row px-xl-5 mt-4">
+            <div class="col-12">
+                <div class="p-4 bg-primary d-flex flex-column flex-md-row align-items-center justify-content-between" style="border-radius: 6px;">
+                    <div class="mb-3 mb-md-0">
+                        <h4 class="font-weight-bold text-dark m-0">Sıkça Sorulan Soruları İncelemek İster misiniz?</h4>
+                        <p class="text-dark m-0 small">En çok merak edilen soruların detaylı yanıtları için SSS sayfamızı ziyaret edin.</p>
+                    </div>
+                    <div>
+                        <a href="/sss.html" class="btn btn-dark font-weight-bold py-2 px-4 mr-2">
+                            <i class="fa fa-question-circle mr-1 text-warning"></i> SSS Sayfasına Git
+                        </a>
+                        <a href="/contact.html" class="btn btn-outline-dark font-weight-bold py-2 px-4">
+                            <i class="fa fa-envelope mr-1"></i> Bize Yazın
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Help Section End -->
+
+
+    <!-- Vendor Start -->
+    <div class="container-fluid py-5">
+        <div class="row px-xl-5">
+            <div class="col">
+                <div class="owl-carousel vendor-carousel">
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-1.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-2.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-3.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-4.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-5.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-6.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-7.jpg" alt="">
+                    </div>
+                    <div class="bg-light p-4">
+                        <img src="img/vendor-8.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor End -->
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <h5 class="text-secondary text-uppercase mb-4">İletişime Geçin</h5>
+                <p class="mb-4">Kaliteli ürünler, hızlı kargo ve güvenilir alışveriş deneyimiyle her zaman yanınızdayız.</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Sokak, İstanbul, Türkiye</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@multishop.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+90 212 345 6789</p>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">Hızlı Alışveriş</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>Anasayfa</a>
+                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Mağazamız</a>
+                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Ürün Detayı</a>
+                            <a class="text-secondary mb-2" href="/cart.html"><i class="fa fa-angle-right mr-2"></i>Alışveriş Sepeti</a>
+                            <a class="text-secondary mb-2" href="/checkout.html"><i class="fa fa-angle-right mr-2"></i>Ödeme Yap</a>
+                            <a class="text-secondary mb-2" href="/contact.html"><i class="fa fa-angle-right mr-2"></i>Temas etmek</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">Hesabım</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>Anasayfa</a>
+                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Mağazamız</a>
+                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Ürün Detayı</a>
+                            <a class="text-secondary mb-2" href="/cart.html"><i class="fa fa-angle-right mr-2"></i>Alışveriş Sepeti</a>
+                            <a class="text-secondary mb-2" href="/checkout.html"><i class="fa fa-angle-right mr-2"></i>Ödeme Yap</a>
+                            <a class="text-secondary mb-2" href="/contact.html"><i class="fa fa-angle-right mr-2"></i>Temas etmek</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
+                        <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
+                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                </div>
+                            </div>
+                        </form>
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Bizi Takip Edin</h6>
+                        <div class="d-flex">
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+            <div class="col-md-6 px-xl-0">
+                <p class="mb-md-0 text-center text-md-left text-secondary">
+                    &copy; <a class="text-primary font-weight-bold" href="/index.html">MultiShop</a>. Tüm Hakları Saklıdır.
+                </p>
+            </div>
+            <div class="col-md-6 px-xl-0 text-center text-md-right">
+                <img class="img-fluid" src="img/payments.png" alt="Ödeme Yöntemleri">
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template & Custom Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/app-common.js"></script>
+</body>
+
+</html>
+

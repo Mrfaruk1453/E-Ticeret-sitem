@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Yönetici Paneli | MultiShop</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="img/favicon.ico" rel="icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .badge-status {
+            font-size: 13px;
+            padding: 6px 10px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .status-ODENDI { background-color: #28a745; color: white; }
+        .status-HAZIRLANIYOR { background-color: #17a2b8; color: white; }
+        .status-KARGOLANDI { background-color: #007bff; color: white; }
+        .status-TESLIM_EDILDI { background-color: #343a40; color: white; }
+        .status-IPTAL { background-color: #dc3545; color: white; }
+        .status-IADE { background-color: #e83e8c; color: white; }
+        .status-ODEME_BEKLIYOR { background-color: #ffc107; color: #333; }
+        .status-ODEME_BASARISIZ { background-color: #6c757d; color: white; }
+        .status-SEPET { background-color: #dee2e6; color: #333; }
+        
+        .login-card {
+            max-width: 420px;
+            margin: 80px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- 1. GİRİŞ EKRANI (Varsayılan olarak gösterilir, oturum açılana kadar dashboard gizlidir) -->
+    <div id="admin-login-view" style="display: none;">
+        <div class="container">
+            <div class="card login-card border-0 bg-white p-4">
+                <div class="text-center mb-4">
+                    <span class="h2 text-uppercase text-primary bg-dark px-2">Multi</span>
+                    <span class="h2 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+                    <h5 class="font-weight-bold text-dark mt-3"><i class="fa fa-lock mr-2 text-primary"></i>Yönetici Girişi</h5>
+                    <p class="text-muted small">Bu alana yalnızca yetkili yönetici erişebilir.</p>
+                </div>
+
+                <div id="login-error-alert" class="alert alert-danger py-2 small" style="display: none;"></div>
+
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label class="font-weight-bold small text-dark">Kullanıcı Adı</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light"><i class="fa fa-user text-muted"></i></span>
+                            </div>
+                            <input type="text" id="admin-username-input" class="form-control" placeholder="Kullanıcı adınızı giriniz" required autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold small text-dark">Şifre</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light"><i class="fa fa-key text-muted"></i></span>
+                            </div>
+                            <input type="password" id="admin-password-input" class="form-control" placeholder="Şifrenizi giriniz" required autocomplete="current-password">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block font-weight-bold py-2 mt-4">
+                        <i class="fa fa-sign-in-alt mr-1"></i> Giriş Yap
+                    </button>
+                </form>
+
+                <div class="text-center mt-4 border-top pt-3">
+                    <a href="/index.html" class="small text-muted"><i class="fa fa-arrow-left mr-1"></i> Mağazaya Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. YÖNETİCİ DASHBOARD EKRANI (Sadece giriş yapıldığında görünür) -->
+    <div id="admin-dashboard-view" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-xl-5">
+            <a href="/index.html" class="text-decoration-none">
+                <span class="h2 text-uppercase text-primary bg-dark px-2">Multi</span>
+                <span class="h2 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+            </a>
+            <span class="navbar-text ml-3 text-light font-weight-bold d-none d-md-inline">
+                <i class="fa fa-cogs mr-1 text-primary"></i> Yönetim & Sipariş Durum Makinesi Paneli
+            </span>
+            <div class="ml-auto d-flex align-items-center">
+                <span class="text-light small mr-3 d-none d-sm-inline">
+                    <i class="fa fa-user-shield text-success mr-1"></i> <strong id="logged-in-username">Yönetici</strong>
+                </span>
+                <a href="/shop.html" class="btn btn-outline-light btn-sm mr-2"><i class="fa fa-shopping-bag mr-1"></i> Mağazayı Gör</a>
+                <button id="btn-admin-logout" class="btn btn-outline-danger btn-sm font-weight-bold"><i class="fa fa-sign-out-alt mr-1"></i> Çıkış Yap</button>
+            </div>
+        </nav>
+
+        <div class="container-fluid py-4 px-xl-5">
+            <!-- İstatistik Kartları -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm border-0 border-left border-primary" style="border-left-width: 5px !important;">
+                        <div class="card-body p-3">
+                            <small class="text-muted text-uppercase font-weight-bold">Toplam Onaylanan Ciro</small>
+                            <h3 class="font-weight-bold text-dark mt-1 mb-0" id="stat-total-revenue">0,00 TL</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm border-0 border-left border-success" style="border-left-width: 5px !important;">
+                        <div class="card-body p-3">
+                            <small class="text-muted text-uppercase font-weight-bold">Aktif Siparişler</small>
+                            <h3 class="font-weight-bold text-dark mt-1 mb-0" id="stat-active-orders">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm border-0 border-left border-warning" style="border-left-width: 5px !important;">
+                        <div class="card-body p-3">
+                            <small class="text-muted text-uppercase font-weight-bold">Kritik Stok Uyarısı (≤ 2)</small>
+                            <h3 class="font-weight-bold text-dark mt-1 mb-0" id="stat-low-stock">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm border-0 border-left border-info" style="border-left-width: 5px !important;">
+                        <div class="card-body p-3">
+                            <small class="text-muted text-uppercase font-weight-bold">Toplam Ürün / Varyant</small>
+                            <h3 class="font-weight-bold text-dark mt-1 mb-0" id="stat-product-count">0 / 0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Şartname Durum Makinesi Şeması Bilgilendirmesi -->
+            <div class="alert alert-secondary shadow-sm mb-4">
+                <div class="d-flex align-items-center">
+                    <i class="fa fa-info-circle fa-2x text-primary mr-3"></i>
+                    <div>
+                        <h6 class="font-weight-bold mb-1">Şekil 02.1 Sipariş Durum Makinesi</h6>
+                        <p class="mb-0 small text-dark">
+                            Sipariş yalnız tanımlı 9 durumdan birinde olabilir:
+                            <code>SEPET &rarr; ODEME_BEKLIYOR &rarr; ODENDI (Stok Düşer) &rarr; HAZIRLANIYOR &rarr; KARGOLANDI &rarr; TESLIM_EDILDI</code>. 
+                            İptal ve İade durumunda stoklar otomatik olarak stoğa geri eklenir. İzin tablosu dışındaki geçişler sunucu tarafından engellenir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Sol Kolon: Siparişler Tablosu ve Durum Geçiş Butonları -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="font-weight-bold text-dark m-0"><i class="fa fa-list-alt mr-2 text-primary"></i> Siparişler ve Durum Geçişleri</h5>
+                            <button class="btn btn-sm btn-outline-secondary font-weight-bold" id="btn-refresh-orders"><i class="fa fa-sync-alt mr-1"></i> Yenile</button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle text-center mb-0">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Sipariş No</th>
+                                            <th>Müşteri</th>
+                                            <th>Tutar</th>
+                                            <th>Durum</th>
+                                            <th>Kargo Takip</th>
+                                            <th>İzinli Geçiş İşlemleri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-orders-tbody">
+                                        <tr><td colspan="6" class="py-4">Siparişler yükleniyor...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon: Canlı Stok Takip Monitörü -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="font-weight-bold text-dark m-0"><i class="fa fa-boxes mr-2 text-primary"></i> Canlı Stok Takibi</h5>
+                            <button class="btn btn-sm btn-outline-secondary font-weight-bold" id="btn-refresh-inventory"><i class="fa fa-sync-alt mr-1"></i></button>
+                        </div>
+                        <div class="card-body p-0" style="max-height: 600px; overflow-y: auto;">
+                            <table class="table table-sm table-striped mb-0 text-center" style="font-size: 13px;">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th class="text-left">Ürün / Varyant</th>
+                                        <th>SKU</th>
+                                        <th>Kalan Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-inventory-tbody">
+                                    <tr><td colspan="3" class="py-3">Stoklar yükleniyor...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kargo Takip No Giriş Modalı -->
+    <div class="modal fade" id="trackingModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title font-weight-bold text-dark"><i class="fa fa-truck mr-2"></i> Kargo Takip Numarası Girişi</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">Şartname kuralı gereğince siparişi <strong>KARGOLANDI</strong> durumuna geçirmeden önce kargo takip numarası girilmesi zorunludur.</p>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Kargo Takip Numarası:</label>
+                        <input type="text" class="form-control" id="modal-tracking-input" placeholder="Örn: YRT-9823418723">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary font-weight-bold" id="btn-confirm-shipping">Kargoya Ver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app-common.js"></script>
+    <script src="js/app-admin.js"></script>
+</body>
+</html>
