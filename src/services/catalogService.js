@@ -252,7 +252,9 @@ function getProductBySlugOrId(identifier) {
 function getHomeProducts() {
   const featured = db.prepare(`
     SELECT p.*, c.name as category_name,
-      (SELECT SUM(stock) FROM product_variants WHERE product_id = p.id) as total_stock
+      (SELECT SUM(stock) FROM product_variants WHERE product_id = p.id) as total_stock,
+      (SELECT id FROM product_variants WHERE product_id = p.id AND stock > 0 ORDER BY id ASC LIMIT 1) as default_variant_id,
+      (SELECT COUNT(DISTINCT color) FROM product_variants WHERE product_id = p.id) as color_count
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     WHERE p.is_featured = 1
@@ -262,7 +264,9 @@ function getHomeProducts() {
 
   const recent = db.prepare(`
     SELECT p.*, c.name as category_name,
-      (SELECT SUM(stock) FROM product_variants WHERE product_id = p.id) as total_stock
+      (SELECT SUM(stock) FROM product_variants WHERE product_id = p.id) as total_stock,
+      (SELECT id FROM product_variants WHERE product_id = p.id AND stock > 0 ORDER BY id ASC LIMIT 1) as default_variant_id,
+      (SELECT COUNT(DISTINCT color) FROM product_variants WHERE product_id = p.id) as color_count
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     ORDER BY p.created_at DESC

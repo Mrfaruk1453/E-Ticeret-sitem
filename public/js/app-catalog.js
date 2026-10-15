@@ -277,35 +277,77 @@ async function fetchAndRenderCatalog() {
 
     container.innerHTML = data.products.map(p => {
       const isOutOfStock = p.total_stock <= 0;
+      const defaultVariant = p.variants ? p.variants.find(v => v.stock > 0) : null;
+      const defaultVariantId = defaultVariant ? defaultVariant.id : null;
+      const wishlisted = typeof isWishlisted === 'function' ? isWishlisted(p.id) : false;
+      const escapedName = p.name.replace(/'/g, "\\'");
+
       return `
-        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-          <div class="product-item bg-light mb-4 shadow-sm" style="border-radius: 4px; overflow: hidden;">
-            <div class="product-img position-relative overflow-hidden">
-              <img class="img-fluid w-100" src="${p.image || 'img/product-1.jpg'}" alt="${p.name}" style="height: 260px; object-fit: cover;">
-              <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" href="/detail.html?slug=${p.slug}"><i class="fa fa-eye"></i></a>
-                <a class="btn btn-outline-dark btn-square" href="/detail.html?slug=${p.slug}"><i class="fa fa-shopping-cart"></i></a>
-              </div>
-              ${isOutOfStock ? `<span class="badge badge-danger position-absolute" style="top: 10px; right: 10px; font-size: 13px; padding: 6px 10px;">TÜKENDİ</span>` : ''}
+        <div class="col-lg-4 col-md-6 col-sm-6 pb-4">
+          <div class="modern-product-card">
+            <!-- Görsel ve Rozetler -->
+            <div class="modern-product-img-wrap">
+              <a href="/detail.html?slug=${p.slug}">
+                <img src="${p.image || 'img/product-1.jpg'}" alt="${p.name}" loading="lazy">
+              </a>
+
+              <!-- Favori Butonu -->
+              <button class="btn-wishlist ${wishlisted ? 'active' : ''}" 
+                      data-product-id="${p.id}" 
+                      onclick="toggleWishlist(${p.id}, '${escapedName}')" 
+                      title="${wishlisted ? 'Favorilerden Çıkar' : 'Favoriye Ekle'}">
+                <i class="${wishlisted ? 'fas fa-heart text-danger' : 'far fa-heart'}"></i>
+              </button>
+
+              <!-- Rozet -->
+              ${isOutOfStock 
+                ? `<span class="card-badge-stock">TÜKENDİ</span>` 
+                : (p.is_featured ? `<span class="card-badge-discount">%15 İNDİRİM</span>` : '')
+              }
+
+              <!-- Hızlı Ekle Butonu -->
+              ${!isOutOfStock && defaultVariantId ? `
+                <div class="quick-add-overlay">
+                  <button class="btn-quick-add" onclick="quickAddToCart(${defaultVariantId}, '${escapedName}')">
+                    <i class="fa fa-shopping-cart mr-2"></i> Hızlı Ekle
+                  </button>
+                </div>
+              ` : ''}
             </div>
-            <div class="text-center py-4 px-2">
-              <small class="text-muted d-block mb-1">${p.category_name || ''}</small>
-              <a class="h6 text-decoration-none text-truncate d-block font-weight-bold" href="/detail.html?slug=${p.slug}" title="${p.name}">${p.name}</a>
-              <div class="d-flex align-items-center justify-content-center mt-2">
-                <h5 class="text-primary font-weight-bold m-0">${formatMoney(p.base_price_cents)}</h5>
+
+            <!-- Ürün Bilgisi -->
+            <div class="modern-product-info">
+              <div>
+                <div class="product-category-sub">${p.category_name || 'Katalog'}</div>
+                <a href="/detail.html?slug=${p.slug}" class="product-title-link" title="${p.name}">
+                  ${p.name}
+                </a>
               </div>
-              <div class="d-flex align-items-center justify-content-center mt-2">
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="font-weight-bold mr-1">${p.rating.toFixed(1)}</small>
-                <small class="text-muted">(${p.review_count})</small>
+
+              <div class="mt-2">
+                <div class="product-price-row">
+                  <span class="product-price-current">${formatMoney(p.base_price_cents)}</span>
+                  ${p.is_featured ? `
+                    <span class="product-price-old">${formatMoney(Math.round(p.base_price_cents * 1.18))}</span>
+                  ` : ''}
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center">
+                  <small class="fa fa-star text-primary mr-1" style="font-size: 11px;"></small>
+                  <small class="font-weight-bold mr-1" style="font-size: 12px;">${p.rating ? p.rating.toFixed(1) : '4.8'}</small>
+                  <small class="text-muted" style="font-size: 11px;">(${p.review_count || 10})</small>
+                </div>
+
+                ${p.variants && p.variants.length > 1 ? `
+                  <div class="product-colors-pill">${p.variants.length} Seçenek</div>
+                ` : ''}
               </div>
-              <div class="mt-2 text-muted" style="font-size: 12px;">
-                ${p.variant_count > 1 ? `<span class="badge badge-info mr-1">${p.variant_count} Farklı Varyant</span>` : ''}
-                ${!isOutOfStock ? `<span class="text-success"><i class="fa fa-check-circle"></i> Stokta Var</span>` : `<span class="text-danger font-weight-bold">Tükendi</span>`}
-              </div>
+
               <div class="mt-3">
-                <a href="/detail.html?slug=${p.slug}" class="btn btn-sm ${isOutOfStock ? 'btn-secondary disabled' : 'btn-primary'} btn-block font-weight-bold">
-                  ${isOutOfStock ? 'Tükendi' : '<i class="fa fa-shopping-cart mr-1"></i> İncele & Seç'}
+                <a href="/detail.html?slug=${p.slug}" 
+                   class="btn btn-sm ${isOutOfStock ? 'btn-secondary disabled' : 'btn-outline-dark'} btn-block font-weight-bold"
+                   style="border-radius: 6px; padding: 7px;">
+                  ${isOutOfStock ? 'Tükendi' : '<i class="fa fa-eye mr-1"></i> İncele & Seç'}
                 </a>
               </div>
             </div>

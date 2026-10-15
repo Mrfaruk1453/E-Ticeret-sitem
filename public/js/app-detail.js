@@ -225,8 +225,11 @@ async function handleAddToCart() {
 
     const data = await res.json();
     if (data.success) {
-      showToast(`${currentProduct.name} (${selectedVariant.size}/${selectedVariant.color}) sepete eklendi!`, 'success');
+      showToast(`✨ ${currentProduct.name} (${selectedVariant.size}/${selectedVariant.color}) sepete eklendi!`, 'success');
       updateNavCartBadge();
+      if (typeof openCartDrawer === 'function') {
+        openCartDrawer();
+      }
     } else {
       showToast(data.error || 'Sepete eklenirken hata oluştu.', 'error');
     }
@@ -242,21 +245,35 @@ function renderRelatedProducts(related) {
   const container = document.getElementById('related-products-container');
   if (!container || !related || related.length === 0) return;
 
-  container.innerHTML = related.map(p => `
-    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-      <div class="product-item bg-light mb-4 shadow-sm" style="border-radius: 4px; overflow: hidden;">
-        <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="${p.image || 'img/product-1.jpg'}" alt="${p.name}" style="height: 200px; object-fit: cover;">
-          <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href="/detail.html?slug=${p.slug}"><i class="fa fa-eye"></i></a>
-            <a class="btn btn-outline-dark btn-square" href="/detail.html?slug=${p.slug}"><i class="fa fa-shopping-cart"></i></a>
+  container.innerHTML = related.map(p => {
+    const wishlisted = typeof isWishlisted === 'function' ? isWishlisted(p.id) : false;
+    const escapedName = p.name.replace(/'/g, "\\'");
+
+    return `
+      <div class="col-lg-3 col-md-4 col-sm-6 pb-4">
+        <div class="modern-product-card">
+          <div class="modern-product-img-wrap" style="height: 220px;">
+            <a href="/detail.html?slug=${p.slug}">
+              <img src="${p.image || 'img/product-1.jpg'}" alt="${p.name}" loading="lazy">
+            </a>
+            <button class="btn-wishlist ${wishlisted ? 'active' : ''}" 
+                    data-product-id="${p.id}" 
+                    onclick="toggleWishlist(${p.id}, '${escapedName}')" 
+                    title="${wishlisted ? 'Favorilerden Çıkar' : 'Favoriye Ekle'}">
+              <i class="${wishlisted ? 'fas fa-heart text-danger' : 'far fa-heart'}"></i>
+            </button>
+          </div>
+          <div class="modern-product-info p-3">
+            <a href="/detail.html?slug=${p.slug}" class="product-title-link mb-2" title="${p.name}">
+              ${p.name}
+            </a>
+            <div class="product-price-current mt-1">${formatMoney(p.base_price_cents)}</div>
+            <a href="/detail.html?slug=${p.slug}" class="btn btn-sm btn-outline-dark btn-block font-weight-bold mt-2" style="border-radius: 6px;">
+              İncele
+            </a>
           </div>
         </div>
-        <div class="text-center py-3 px-2">
-          <a class="h6 text-decoration-none text-truncate d-block font-weight-bold" href="/detail.html?slug=${p.slug}">${p.name}</a>
-          <h6 class="text-primary font-weight-bold mt-2">${formatMoney(p.base_price_cents)}</h6>
-        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
