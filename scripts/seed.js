@@ -120,65 +120,65 @@ function seedDatabase() {
     // Erkek Elbiseleri (Takım Elbise)
     {
       cat: 'elbiseler',
-      name: 'İtalyan Kesim Kruvaze Düğmeli Erkek Takım Elbise',
-      slug: 'italyan-kesim-kruvaze-dugmeli-erkek-takim-elbise',
-      desc: 'Modern İtalyan kruvaze kesim, altın rengi düğme detaylı, şık ve karizmatik erkek takım elbise ceketi. Özel davet ve iş modası için idealdir.',
+      name: 'İtalyan Kesim Kruvaze Düğmeli Lacivert Erkek Takım Elbise',
+      slug: 'italyan-kesim-kruvaze-dugmeli-lacivert-erkek-takim-elbise',
+      desc: 'Modern İtalyan kruvaze kesim, zarif düğme detaylı, şık ve karizmatik lacivert erkek takım elbise. Özel davet ve iş modası için idealdir.',
       base_price_cents: 289990, image: 'img/prod-suit-1.jpg', rating: 4.9, review_count: 54, is_featured: 1, is_recent: 1,
       variants: [
-        { sku: 'TAK-48-SAR', size: '48', color: 'Hardal Sarısı', stock: 8, price_cents: 289990 },
-        { sku: 'TAK-50-SAR', size: '50', color: 'Hardal Sarısı', stock: 12, price_cents: 289990 },
-        { sku: 'TAK-52-SAR', size: '52', color: 'Hardal Sarısı', stock: 6, price_cents: 289990 },
-        { sku: 'TAK-54-SAR', size: '54', color: 'Hardal Sarısı', stock: 0, price_cents: 289990 } // Tükendi
+        { sku: 'TAK-48-LAC', size: '48', color: 'Lacivert', stock: 8, price_cents: 289990 },
+        { sku: 'TAK-50-LAC', size: '50', color: 'Lacivert', stock: 12, price_cents: 289990 },
+        { sku: 'TAK-52-LAC', size: '52', color: 'Lacivert', stock: 6, price_cents: 289990 },
+        { sku: 'TAK-54-LAC', size: '54', color: 'Lacivert', stock: 0, price_cents: 289990 } // Tükendi
       ]
     },
     {
       cat: 'elbiseler',
-      name: 'Klasik Fit Desenli Yaka Gri Erkek Takım Elbise',
-      slug: 'klasik-fit-desenli-yaka-gri-erkek-takim-elbise',
-      desc: 'Şık fular desenli yaka detayı, özel dokuma kumaşı ve modern kesimiyle zamansız şıklık sunan erkek takım elbise. Düğün ve davetler için mükemmel seçim.',
+      name: 'Klasik Kesim Antrasit Koyu Gri Yün Erkek Takım Elbise',
+      slug: 'klasik-kesim-antrasit-koyu-gri-yun-erkek-takim-elbise',
+      desc: 'Birinci sınıf yün karışımlı kumaşı, modern kırlangıç yaka ve zamansız kesimiyle üstün şıklık sunan antrasit gri erkek takım elbise. Düğün, gala ve iş toplantıları için kusursuz seçim.',
       base_price_cents: 259990, image: 'img/prod-suit-2.jpg', rating: 4.8, review_count: 47, is_featured: 1, is_recent: 0,
       variants: [
-        { sku: 'TAK-48-GRI', size: '48', color: 'Kırçıllı Gri', stock: 10, price_cents: 259990 },
-        { sku: 'TAK-50-GRI', size: '50', color: 'Kırçıllı Gri', stock: 14, price_cents: 259990 },
-        { sku: 'TAK-52-GRI', size: '52', color: 'Kırçıllı Gri', stock: 5, price_cents: 259990 }
+        { sku: 'TAK-48-GRI', size: '48', color: 'Antrasit Gri', stock: 10, price_cents: 259990 },
+        { sku: 'TAK-50-GRI', size: '50', color: 'Antrasit Gri', stock: 14, price_cents: 259990 },
+        { sku: 'TAK-52-GRI', size: '52', color: 'Antrasit Gri', stock: 5, price_cents: 259990 }
       ]
     },
 
     // Bebek Elbiseleri ve Ürünleri
     {
       cat: 'elbiseler',
-      name: 'Kolej Stili Renkli Ceket & Etekli Bebek Elbise Takımı',
-      slug: 'kolej-stili-renkli-ceket-etekli-bebek-elbise-takimi',
-      desc: 'Yumuşak pamuklu astarlı, şapka ve ceket aksesuarlı, enerjik kolej tasarımı bebek elbisesi ve giyim takımı. Bebek ve çocuk ürünleri serisi.',
+      name: 'Organik Pamuklu Çiçek Desenli Fırfırlı Bebek Elbisesi',
+      slug: 'organik-pamuklu-cicek-desenli-firfirli-bebek-elbisesi',
+      desc: 'Yumuşacık nefes alan %100 organik pamuk kumaş, sevimli pastel kır çiçekleri ve omuz fırfır detaylı kız bebek yazlık elbisesi. Bebek ve çocuk ürünleri serisi.',
       base_price_cents: 38990, image: 'img/prod-baby-1.jpg', rating: 4.9, review_count: 62, is_featured: 1, is_recent: 1,
       variants: [
-        { sku: 'BBK-6M-SAR', size: '6-9 Ay', color: 'Sarı & Mavi', stock: 15, price_cents: 38990 },
-        { sku: 'BBK-12M-SAR', size: '12-18 Ay', color: 'Sarı & Mavi', stock: 20, price_cents: 38990 },
-        { sku: 'BBK-24M-SAR', size: '2-3 Yaş', color: 'Sarı & Mavi', stock: 10, price_cents: 38990 }
+        { sku: 'BBK-6M-PEM', size: '6-9 Ay', color: 'Çiçekli Pembe', stock: 15, price_cents: 38990 },
+        { sku: 'BBK-12M-PEM', size: '12-18 Ay', color: 'Çiçekli Pembe', stock: 20, price_cents: 38990 },
+        { sku: 'BBK-24M-PEM', size: '2-3 Yaş', color: 'Çiçekli Pembe', stock: 10, price_cents: 38990 }
       ]
     },
     {
       cat: 'elbiseler',
-      name: 'Pileli Etekli Prenses Bebek Elbisesi & Bere Takımı',
-      slug: 'pileli-etekli-prenses-bebek-elbisesi-bere-takimi',
-      desc: 'Şık metalik pileli etek, nakışlı bomber ceket ve Fransız bereli özel tasarım kız bebek elbisesi ürünü. Doğum günü ve özel günler için bebek ürünü.',
+      name: 'Doğum Günü & Özel Gün Pastel Pembe Tüllü Prenses Bebek Elbisesi',
+      slug: 'dogum-gunu-ozel-gun-pastel-pembe-tullu-prenses-bebek-elbisesi',
+      desc: 'Kat kat dökümlü tüllü kabarık etek, zarif inci ve fiyonk süslemeli, pamuk astarlı lüks kız bebek prenses elbisesi. Doğum günü ve özel günler için bebek ürünü.',
       base_price_cents: 44990, image: 'img/prod-baby-2.jpg', rating: 4.8, review_count: 51, is_featured: 1, is_recent: 0,
       variants: [
-        { sku: 'BBK-6M-PIL', size: '6-9 Ay', color: 'Gold & Siyah', stock: 12, price_cents: 44990 },
-        { sku: 'BBK-12M-PIL', size: '12-18 Ay', color: 'Gold & Siyah', stock: 16, price_cents: 44990 },
-        { sku: 'BBK-24M-PIL', size: '2-3 Yaş', color: 'Gold & Siyah', stock: 8, price_cents: 44990 }
+        { sku: 'BBK-6M-PDR', size: '6-9 Ay', color: 'Pudra Pembe', stock: 12, price_cents: 44990 },
+        { sku: 'BBK-12M-PDR', size: '12-18 Ay', color: 'Pudra Pembe', stock: 16, price_cents: 44990 },
+        { sku: 'BBK-24M-PDR', size: '2-3 Yaş', color: 'Pudra Pembe', stock: 8, price_cents: 44990 }
       ]
     },
     {
       cat: 'elbiseler',
-      name: 'Çizgili Body & Kapüşonlu Bebek Tulum Elbise Takımı',
-      slug: 'cizgili-body-kapusonlu-bebek-tulum-elbise-takimi',
-      desc: 'Nefes alabilen %100 pamuklu çizgili t-shirt body ve spor ceketli günlük bebek tulum elbise ürünü. Rahat kalıp ve antialerjik bebek ürünü.',
+      name: 'Bambu Organik Fitilli Adaçayı Yeşili Düğmeli Bebek Tulumu',
+      slug: 'bambu-organik-fitilli-adacayi-yesili-dugmeli-bebek-tulumu',
+      desc: 'Hassas ciltler için antialerjik nefes alan adaçayı yeşili organik pamuk fitilli kumaş, önden ahşap düğmeli şık ve rahat bebek tulumu ve zıbını. Bebek ürünü.',
       base_price_cents: 32990, image: 'img/prod-baby-3.jpg', rating: 4.7, review_count: 38, is_featured: 0, is_recent: 1,
       variants: [
-        { sku: 'BBK-3M-CZZ', size: '3-6 Ay', color: 'Çizgili Siyah', stock: 14, price_cents: 32990 },
-        { sku: 'BBK-6M-CZZ', size: '6-9 Ay', color: 'Çizgili Siyah', stock: 18, price_cents: 32990 },
-        { sku: 'BBK-12M-CZZ', size: '12-18 Ay', color: 'Çizgili Siyah', stock: 12, price_cents: 32990 }
+        { sku: 'BBK-3M-YES', size: '3-6 Ay', color: 'Adaçayı Yeşili', stock: 14, price_cents: 32990 },
+        { sku: 'BBK-6M-YES', size: '6-9 Ay', color: 'Adaçayı Yeşili', stock: 18, price_cents: 32990 },
+        { sku: 'BBK-12M-YES', size: '12-18 Ay', color: 'Adaçayı Yeşili', stock: 12, price_cents: 32990 }
       ]
     },
 
@@ -596,10 +596,10 @@ function seedDatabase() {
       ]
     },
     {
-      cat: 'elbiseler',
-      name: 'Klasik Vintage Seramik Abajur Kumaş Pileli Masa Lambası',
-      slug: 'vintage-seramik-abajur-masa-lambasi',
-      desc: 'Kahverengi parlak seramik vazo gövde, pileli beyaz kumaş şapka, sıcak sarı aydınlatma klasik gece lambası.',
+      cat: 'uyku-kiyafetleri',
+      name: 'Klasik Vintage Seramik Abajur Yatak Odası Masa Lambası',
+      slug: 'vintage-seramik-abajur-yatak-odasi-masa-lambasi',
+      desc: 'Yatak odası ve dinlenme alanları için kahverengi seramik gövdeli, pileli şapkalı, loş dinlendirici sarı ışıklı klasik komodin lambası.',
       base_price_cents: 65000, image: 'img/product-3.jpg', rating: 4.8, review_count: 89, is_featured: 1, is_recent: 0,
       variants: [
         { sku: 'LMB-STD-KAH', size: 'Standart', color: 'Kahverengi', stock: 8, price_cents: 65000 }

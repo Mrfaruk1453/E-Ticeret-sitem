@@ -9729,3 +9729,45 @@ a.text-dark:hover, a.text-dark:focus {
   color: #000 !important;
 }
 
+/* Main Navbar Links with Top Icons */
+.navbar-dark .navbar-nav .nav-link.main-nav-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 16px;
+  min-height: 65px;
+  transition: all 0.25s ease-in-out;
+}
+.main-nav-link .nav-icon {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 3px;
+  transition: transform 0.2s ease-in-out;
+}
+.main-nav-link:hover .nav-icon {
+  transform: translateY(-2px) scale(1.1);
+}
+.main-nav-link span {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+@media (max-width: 991.98px) {
+  .navbar-dark .navbar-nav .nav-link.main-nav-link {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 10px 15px !important;
+    min-height: auto;
+  }
+  .main-nav-link .nav-icon {
+    height: 22px;
+    margin-bottom: 0;
+    margin-right: 12px;
+  }
+}
+
+
