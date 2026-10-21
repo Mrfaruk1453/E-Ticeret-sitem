@@ -10702,6 +10702,51 @@ body {
   color: #C69B56;
 }
 
-
-
-
+/* 6-Card Responsive Showcase Enhancements */
+@media (min-width: 1200px) {
+  .sketch-img-wrap {
+    height: 250px;
+  }
+  .sketch-card-body {
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+  .sketch-badge {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+  }
+  .sketch-title {
+    font-size: 15px;
+    margin-bottom: 4px;
+    line-height: 1.25;
+  }
+  .sketch-desc {
+    font-size: 11px;
+    margin-bottom: 8px;
+    line-height: 1.35;
+    height: 30px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .sketch-cta {
+    font-size: 12px;
+  }
+}
+@media (max-width: 1199.98px) {
+  .sketch-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+}
