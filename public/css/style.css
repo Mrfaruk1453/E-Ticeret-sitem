@@ -10750,3 +10750,45 @@ body {
     flex-grow: 1;
   }
 }
+
+
+/* ==========================================================================
+   Accessibility & Micro-Interaction Polish (Awwwards & Apple standard)
+   ========================================================================== */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #C69B56 !important;
+  outline-offset: 3px !important;
+}
+
+/* Fluid button feedback */
+.btn-primary, .btn-hero-primary, .btn-quick-add {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-primary:hover, .btn-hero-primary:hover, .btn-quick-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+.btn-primary:active, .btn-hero-primary:active, .btn-quick-add:active {
+  transform: translateY(0);
+}
+
+/* Image aspect ratio preservation to eliminate CLS */
+.modern-product-img-wrap img,
+.fashion-story-card img,
+.sketch-img-wrap img {
+  content-visibility: auto;
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+  .nav-link, .topbar-icon-link, .btn, .cart-stepper-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

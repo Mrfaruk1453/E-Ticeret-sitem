@@ -3,23 +3,35 @@
 
 <head>
     <meta charset="utf-8">
-    <title>MultiShop - E-Ticaret Sitesi (Katalog, Sepet ve Ödeme)</title>
+    <title>MultiShop | Lüks Moda & E-Ticaret - Erkek, Kadın ve Çocuk Koleksiyonu</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı E-Ticaret Projesi" name="keywords">
-    <meta content="E-Ticaret Sitesi: Katalog, Sepet, Ödeme ve Durum Makinesi" name="description">
+    <meta name="description" content="MultiShop ile sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonlarını keşfedin. Hızlı teslimat, 14 gün kolay iade ve güvenli ödeme.">
+    <meta name="keywords" content="moda, e-ticaret, kadın elbiseleri, erkek takım elbise, çocuk modası, ayakkabı, ceket, multishop">
+    <link rel="canonical" href="https://e-ticeret-sitem.vercel.app/">
     <meta name="google-site-verification" content="PNcAgb-suGGjMU_taT6PKtDBSQ0BEbVJN_1wiACRc2A" />
+
+    <!-- Performance LCP Preload -->
+    <link rel="preload" as="image" href="img/carousel-1.jpg">
 
     <!-- Open Graph / Sosyal Medya Paylaşım Önizlemesi -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MultiShop">
+    <meta property="og:locale" content="tr_TR">
     <meta property="og:url" content="https://e-ticeret-sitem.vercel.app/">
-    <meta property="og:title" content="MultiShop - E-Ticaret Sitesi">
-    <meta property="og:description" content="Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı E-Ticaret Projesi: Katalog, Sepet ve Ödeme">
-    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/logo.png">
+    <meta property="og:title" content="MultiShop | Lüks Moda & E-Ticaret">
+    <meta property="og:description" content="Sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonları.">
+    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MultiShop | Lüks Moda & E-Ticaret">
+    <meta name="twitter:description" content="Sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonları.">
+    <meta name="twitter:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
 
-    <!-- Google Web Fonts -->
+    <!-- Google Web Fonts with font-display: swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
@@ -33,6 +45,44 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- Schema.org JSON-LD Structured Data (Organization & WebSite) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://e-ticeret-sitem.vercel.app/#organization",
+          "name": "MultiShop",
+          "url": "https://e-ticeret-sitem.vercel.app/",
+          "logo": "https://e-ticeret-sitem.vercel.app/img/logo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+90-551-351-4680",
+            "contactType": "customer service",
+            "areaServed": "TR",
+            "availableLanguage": ["Turkish"]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://e-ticeret-sitem.vercel.app/#website",
+          "url": "https://e-ticeret-sitem.vercel.app/",
+          "name": "MultiShop",
+          "description": "Lüks Moda & E-Ticaret Mağazası",
+          "publisher": {
+            "@id": "https://e-ticeret-sitem.vercel.app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://e-ticeret-sitem.vercel.app/shop.html?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 
 <body>
@@ -595,11 +645,11 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
                         <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
-                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                        <form class="newsletter-form" action="/api/newsletter" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required aria-label="E-posta Adresiniz">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                    <button class="btn btn-primary font-weight-bold px-3" type="submit">Abone Ol</button>
                                 </div>
                             </div>
                         </form>

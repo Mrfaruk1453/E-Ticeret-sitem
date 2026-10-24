@@ -3,8 +3,27 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Ürün Kataloğu & Filtreleme - MultiShop</title>
+    <title>Koleksiyonlar & Mağaza Kataloğu | MultiShop</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="MultiShop geniş ürün kataloğunda erkek ve kadın giyim, takım elbise, ayakkabı, ceket ve aksesuarları keşfedin. Beden, renk ve fiyat filtreleriyle hemen sipariş verin.">
+    <link rel="canonical" href="https://e-ticeret-sitem.vercel.app/shop.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MultiShop">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:url" content="https://e-ticeret-sitem.vercel.app/shop.html">
+    <meta property="og:title" content="Koleksiyonlar & Mağaza Kataloğu | MultiShop">
+    <meta property="og:description" content="MultiShop geniş ürün kataloğunda en seçkin moda parçalarını filtreleyin ve online sipariş verin.">
+    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Koleksiyonlar & Mağaza Kataloğu | MultiShop">
+    <meta name="twitter:description" content="MultiShop geniş ürün kataloğunda en seçkin moda parçalarını filtreleyin ve online sipariş verin.">
+    <meta name="twitter:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +32,28 @@
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Anasayfa",
+          "item": "https://e-ticeret-sitem.vercel.app/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Mağaza & Katalog",
+          "item": "https://e-ticeret-sitem.vercel.app/shop.html"
+        }
+      ]
+    }
+    </script>
 </head>
 
 <body>
@@ -54,7 +95,7 @@
             <div class="col-lg-5 text-center text-lg-right">
                 <button type="button" class="btn btn-sm btn-primary font-weight-bold open-cart-drawer-trigger" style="border-radius: 6px;">
                     <i class="fa fa-shopping-cart mr-1"></i> Sepetim (<span class="cart-badge">0</span>)
-                </a>
+                </button>
             </div>
         </div>
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
@@ -402,11 +443,11 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
                         <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
-                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                        <form class="newsletter-form" action="/api/newsletter" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required aria-label="E-posta Adresiniz">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                    <button class="btn btn-primary font-weight-bold px-3" type="submit">Abone Ol</button>
                                 </div>
                             </div>
                         </form>

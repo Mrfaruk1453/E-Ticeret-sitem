@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Alışveriş Sepetim - MultiShop</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="robots" content="noindex, follow">
     <link href="img/favicon.ico" rel="icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -323,11 +324,11 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
                         <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
-                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                        <form class="newsletter-form" action="/api/newsletter" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required aria-label="E-posta Adresiniz">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                    <button class="btn btn-primary font-weight-bold px-3" type="submit">Abone Ol</button>
                                 </div>
                             </div>
                         </form>

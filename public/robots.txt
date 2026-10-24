@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /order-success.html
+Disallow: /api/cart
+Disallow: /api/checkout
+Disallow: /api/admin
+Disallow: /api/orders
+
+Sitemap: https://e-ticeret-sitem.vercel.app/sitemap.xml
