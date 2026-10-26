@@ -10827,5 +10827,13 @@ textarea:focus-visible {
 }
 
 
-#header-carousel { min-height: 430px; }
-@media (max-width: 768px) { #header-carousel { min-height: 360px; } }
+#header-carousel {
+  height: 430px;
+  min-height: 430px;
+}
+@media (max-width: 768px) {
+  #header-carousel {
+    height: 360px !important;
+    min-height: 360px !important;
+  }
+}

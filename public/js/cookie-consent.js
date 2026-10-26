@@ -109,9 +109,25 @@
   };
 
   // Sayfa ilk render ve FCP/CLS ölçümlerini tamamladıktan sonra göster (CLS & Reflow Önleme)
+  function scheduleCookieConsent() {
+    let fired = false;
+    function trigger() {
+      if (fired) return;
+      fired = true;
+      window.removeEventListener('scroll', trigger);
+      window.removeEventListener('touchstart', trigger);
+      window.removeEventListener('click', trigger);
+      initCookieConsent();
+    }
+    window.addEventListener('scroll', trigger, { passive: true, once: true });
+    window.addEventListener('touchstart', trigger, { passive: true, once: true });
+    window.addEventListener('click', trigger, { passive: true, once: true });
+    setTimeout(trigger, 3500);
+  }
+
   if (document.readyState === 'complete') {
-    setTimeout(initCookieConsent, 1200);
+    scheduleCookieConsent();
   } else {
-    window.addEventListener('load', () => setTimeout(initCookieConsent, 1200));
+    window.addEventListener('load', scheduleCookieConsent);
   }
 })();
