@@ -142,10 +142,16 @@ function setupCheckoutForm() {
       const data = await res.json();
 
       if (data.success && data.orderNumber) {
+        try {
+          const fullOrder = data.order || {};
+          if (!fullOrder.items && data.items) fullOrder.items = data.items;
+          sessionStorage.setItem('latest_order_' + data.orderNumber, JSON.stringify(fullOrder));
+          sessionStorage.setItem('latest_order_current', JSON.stringify(fullOrder));
+        } catch (e) {}
         showToast('Ödemeniz onaylandı! Sipariş sayfasına yönlendiriliyorsunuz...', 'success');
         setTimeout(() => {
           window.location.href = `/order-success.html?order=${data.orderNumber}`;
-        }, 1200);
+        }, 1000);
       } else {
         // Başarısız Senaryo:
         // Şartname Kuralı: "5. Ödeme hem başarılı hem başarısız senaryoda doğru sonuçlanmalı."

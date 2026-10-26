@@ -29,9 +29,14 @@ router.post('/', async (req, res) => {
     });
 
     if (result.success) {
+      if (result.order) {
+        result.order.items = result.items || [];
+        result.order.payment = result.payment || null;
+      }
       res.json({
         success: true,
         order: result.order,
+        items: result.items,
         orderNumber: result.order.order_number,
         payment: result.payment,
         message: result.message
