@@ -192,6 +192,12 @@ async function loadAdminOrders() {
     }
 
     tbody.innerHTML = data.orders.map(order => {
+      // Serverless client-side cache overlay
+      const localStatus = localStorage.getItem('admin_order_status_' + order.id);
+      const localTracking = localStorage.getItem('admin_order_tracking_' + order.id);
+      if (localStatus) order.status = localStatus;
+      if (localTracking) order.tracking_number = localTracking;
+
       const statusClass = `status-${order.status}`;
       const actionButtons = renderTransitionButtons(order);
 
@@ -318,6 +324,12 @@ async function executeTransition(orderId, toStatus, meta = {}) {
 
     const data = await res.json();
     if (data.success) {
+      try {
+        localStorage.setItem('admin_order_status_' + orderId, toStatus);
+        if (meta.tracking_number) {
+          localStorage.setItem('admin_order_tracking_' + orderId, meta.tracking_number);
+        }
+      } catch (e) {}
       showToast(data.message, 'success');
       loadAdminOrders();
       loadAdminStats();
