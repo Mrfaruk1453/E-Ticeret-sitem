@@ -50,10 +50,24 @@ router.post('/sync', (req, res) => {
         `);
         for (const it of order.items) {
           try {
+            let resolvedVariantId = it.variant_id || null;
+            let resolvedProductId = it.product_id || null;
+
+            if (!resolvedVariantId && it.variant_info && it.variant_info.includes('SKU:')) {
+              const m = it.variant_info.match(/SKU:\s*([^)]+)/);
+              if (m && m[1]) {
+                const row = db.prepare('SELECT id, product_id FROM product_variants WHERE sku = ?').get(m[1].trim());
+                if (row) {
+                  resolvedVariantId = row.id;
+                  resolvedProductId = row.product_id;
+                }
+              }
+            }
+
             itemStmt.run(
               insertedOrderId,
-              it.product_id || 1,
-              it.variant_id || 1,
+              resolvedProductId || 1,
+              resolvedVariantId || null,
               it.product_name || 'Ürün',
               it.variant_info || '',
               it.price_cents || 0,
@@ -63,13 +77,21 @@ router.post('/sync', (req, res) => {
           } catch (e) {}
         }
 
-        // Deduct stock if order is active
+        // Deduct stock if order is active - ONLY for the exact verified variant ID
         if (['ODENDI', 'HAZIRLANIYOR', 'KARGOLANDI', 'TESLIM_EDILDI'].includes(order.status)) {
           for (const it of order.items) {
-            const variantId = it.variant_id || it.id;
+            let resolvedVariantId = it.variant_id || null;
+            if (!resolvedVariantId && it.variant_info && it.variant_info.includes('SKU:')) {
+              const m = it.variant_info.match(/SKU:\s*([^)]+)/);
+              if (m && m[1]) {
+                const row = db.prepare('SELECT id FROM product_variants WHERE sku = ?').get(m[1].trim());
+                if (row) resolvedVariantId = row.id;
+              }
+            }
+
             const qty = parseInt(it.quantity, 10) || 1;
-            if (variantId) {
-              db.prepare('UPDATE product_variants SET stock = MAX(0, stock - ?) WHERE id = ?').run(qty, variantId);
+            if (resolvedVariantId) {
+              db.prepare('UPDATE product_variants SET stock = MAX(0, stock - ?) WHERE id = ?').run(qty, resolvedVariantId);
             }
           }
         }
