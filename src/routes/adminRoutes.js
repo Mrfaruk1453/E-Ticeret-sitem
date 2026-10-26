@@ -8,16 +8,60 @@ const { db } = require('../config/database');
 // Admin Credentials requested by the user
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'Mrfaruk46';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '966171154Uzer.';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || 'multishop_admin_secret_key_oku_2026_super_secure';
 
-// In-memory active admin sessions store
-const activeAdminSessions = new Set();
+// Stateless signed HMAC-SHA256 token helper for Serverless & Multi-instance compatibility
+function generateAdminToken(username) {
+  const timestamp = Date.now();
+  const payload = `${username}:${timestamp}`;
+  const hmac = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('hex');
+  return Buffer.from(`${payload}:${hmac}`).toString('base64url');
+}
+
+function verifyAdminToken(token) {
+  if (!token) return false;
+  try {
+    const decoded = Buffer.from(token, 'base64url').toString('utf8');
+    const parts = decoded.split(':');
+    if (parts.length !== 3) return false;
+    const [username, timestampStr, signature] = parts;
+    const timestamp = parseInt(timestampStr, 10);
+    
+    // Check age (24 hours validity)
+    if (isNaN(timestamp) || Date.now() - timestamp > 24 * 60 * 60 * 1000) {
+      return false;
+    }
+    
+    // Check username
+    if (username !== ADMIN_USERNAME) {
+      return false;
+    }
+    
+    // Check HMAC signature
+    const expectedPayload = `${username}:${timestamp}`;
+    const expectedSignature = crypto.createHmac('sha256', ADMIN_SECRET).update(expectedPayload).digest('hex');
+    
+    if (signature.length !== expectedSignature.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
+  } catch (e) {
+    return false;
+  }
+}
+
+function getAdminToken(req) {
+  return (
+    (req.cookies && req.cookies['admin_session']) ||
+    req.headers['x-admin-token'] ||
+    (req.headers['authorization'] && req.headers['authorization'].replace(/^Bearer\s+/i, ''))
+  );
+}
 
 /**
  * Authentication Middleware for Admin routes
  */
 function requireAdminAuth(req, res, next) {
-  const token = req.cookies && req.cookies['admin_session'];
-  if (!token || !activeAdminSessions.has(token)) {
+  const token = getAdminToken(req);
+  if (!verifyAdminToken(token)) {
     return res.status(401).json({
       success: false,
       error: 'Yetkisiz erişim. Lütfen yönetici girişi yapınız.'
@@ -31,19 +75,20 @@ router.post('/login', (req, res) => {
   const { username, password } = req.body;
   
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    const sessionToken = crypto.randomBytes(32).toString('hex');
-    activeAdminSessions.add(sessionToken);
+    const sessionToken = generateAdminToken(username);
 
     res.cookie('admin_session', sessionToken, {
       httpOnly: true,
       sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https',
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
 
     return res.json({
       success: true,
       message: 'Yönetici girişi başarılı.',
-      username: ADMIN_USERNAME
+      username: ADMIN_USERNAME,
+      token: sessionToken
     });
   }
 
@@ -55,18 +100,14 @@ router.post('/login', (req, res) => {
 
 // 2. Admin Logout Endpoint
 router.post('/logout', (req, res) => {
-  const token = req.cookies && req.cookies['admin_session'];
-  if (token) {
-    activeAdminSessions.delete(token);
-  }
   res.clearCookie('admin_session');
   res.json({ success: true, message: 'Çıkış yapıldı.' });
 });
 
 // 3. Admin Auth Status Check
 router.get('/auth-status', (req, res) => {
-  const token = req.cookies && req.cookies['admin_session'];
-  const authenticated = !!(token && activeAdminSessions.has(token));
+  const token = getAdminToken(req);
+  const authenticated = verifyAdminToken(token);
   res.json({ success: true, authenticated, username: authenticated ? ADMIN_USERNAME : null });
 });
 

@@ -32,15 +32,27 @@ function setupAuthEventListeners() {
   document.getElementById('btn-confirm-shipping')?.addEventListener('click', handleConfirmShipping);
 }
 
+// Helper: Stateless & Cookie hybrid fetch for Admin API
+function adminFetch(url, options = {}) {
+  const token = localStorage.getItem('admin_token');
+  const headers = Object.assign({}, options.headers || {});
+  if (token) {
+    headers['x-admin-token'] = token;
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+  return fetch(url, Object.assign({}, options, { headers, credentials: 'same-origin' }));
+}
+
 // Check admin auth status on load
 async function checkAdminAuth() {
   try {
-    const res = await fetch('/api/admin/auth-status');
+    const res = await adminFetch('/api/admin/auth-status');
     const data = await res.json();
 
     if (data.success && data.authenticated) {
       showDashboard(data.username);
     } else {
+      localStorage.removeItem('admin_token');
       showLoginForm();
     }
   } catch (err) {
@@ -98,6 +110,9 @@ async function handleAdminLogin(e) {
     const data = await res.json();
 
     if (data.success) {
+      if (data.token) {
+        localStorage.setItem('admin_token', data.token);
+      }
       showToast('Giriş başarılı. Hoş geldiniz!', 'success');
       showDashboard(data.username);
     } else {
@@ -119,18 +134,18 @@ async function handleAdminLogin(e) {
 
 async function handleAdminLogout() {
   try {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    showToast('Çıkış yapıldı.', 'info');
-    showLoginForm();
-  } catch (err) {
-    showLoginForm();
-  }
+    await adminFetch('/api/admin/logout', { method: 'POST' });
+  } catch (err) {}
+  localStorage.removeItem('admin_token');
+  showToast('Çıkış yapıldı.', 'info');
+  showLoginForm();
 }
 
 async function loadAdminStats() {
   try {
-    const res = await fetch('/api/admin/stats');
+    const res = await adminFetch('/api/admin/stats');
     if (res.status === 401) {
+      localStorage.removeItem('admin_token');
       showLoginForm();
       return;
     }
@@ -157,8 +172,9 @@ async function loadAdminOrders() {
   if (!tbody) return;
 
   try {
-    const res = await fetch('/api/admin/orders');
+    const res = await adminFetch('/api/admin/orders');
     if (res.status === 401) {
+      localStorage.removeItem('admin_token');
       showLoginForm();
       return;
     }
@@ -290,7 +306,7 @@ function renderTransitionButtons(order) {
 
 async function executeTransition(orderId, toStatus, meta = {}) {
   try {
-    const res = await fetch(`/api/admin/orders/${orderId}/transition`, {
+    const res = await adminFetch(`/api/admin/orders/${orderId}/transition`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -333,8 +349,9 @@ async function loadAdminInventory() {
   if (!tbody) return;
 
   try {
-    const res = await fetch('/api/admin/inventory');
+    const res = await adminFetch('/api/admin/inventory');
     if (res.status === 401) {
+      localStorage.removeItem('admin_token');
       showLoginForm();
       return;
     }
