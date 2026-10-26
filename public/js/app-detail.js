@@ -167,11 +167,35 @@ function renderProductDetail(p) {
   document.getElementById('product-reviews-count').textContent = `(${p.review_count} Değerlendirme)`;
   document.getElementById('product-rating-val').textContent = p.rating.toFixed(1);
 
-  // Images
+  // Images with Smooth Loading State
   const mainImg = document.getElementById('product-main-image');
+  const imgLoader = document.getElementById('product-img-loader');
   if (mainImg) {
-    mainImg.src = p.image || 'img/product-1.jpg';
-    mainImg.alt = p.name;
+    if (p.image) {
+      mainImg.src = p.image;
+      mainImg.alt = p.name;
+      const showImage = () => {
+        if (imgLoader) imgLoader.style.display = 'none';
+        mainImg.style.display = 'block';
+        requestAnimationFrame(() => {
+          mainImg.style.opacity = '1';
+        });
+      };
+      if (mainImg.complete && mainImg.naturalWidth > 0) {
+        showImage();
+      } else {
+        mainImg.onload = showImage;
+        mainImg.onerror = () => {
+          if (imgLoader) {
+            imgLoader.innerHTML = '<span class="text-muted font-weight-bold">Görsel yüklenemedi</span>';
+          }
+        };
+      }
+    } else {
+      if (imgLoader) {
+        imgLoader.innerHTML = '<span class="text-muted font-weight-bold">Görsel bulunmuyor</span>';
+      }
+    }
   }
 
   // Render Size Options

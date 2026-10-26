@@ -204,8 +204,16 @@
     <div class="container-fluid pb-5" id="product-detail-container">
         <div class="row px-xl-5">
             <div class="col-lg-5 mb-30">
-                <div class="bg-light p-3 text-center shadow-sm" style="border-radius: 8px;">
-                    <img id="product-main-image" class="img-fluid w-100" src="img/product-1.jpg" alt="Ürün Fotoğrafı" style="max-height: 480px; object-fit: contain;">
+                <div class="bg-light p-3 text-center shadow-sm position-relative d-flex align-items-center justify-content-center" style="border-radius: 8px; min-height: 380px; height: 440px;">
+                    <!-- Yükleniyor Göstergesi -->
+                    <div id="product-img-loader" class="d-flex flex-column align-items-center justify-content-center w-100 h-100 py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="sr-only">Yükleniyor...</span>
+                        </div>
+                        <span class="text-muted font-weight-bold" style="font-size: 14px;">Ürün Görseli Yükleniyor...</span>
+                    </div>
+                    <!-- Gerçek Ürün Görseli -->
+                    <img id="product-main-image" class="img-fluid w-100" src="" alt="Ürün Fotoğrafı" style="max-height: 440px; object-fit: contain; display: none; opacity: 0; transition: opacity 0.3s ease;">
                 </div>
             </div>
 
