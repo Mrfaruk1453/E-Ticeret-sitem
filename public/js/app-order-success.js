@@ -1,20 +1,5 @@
 /**
  * MultiShop Sipariş Takip & Onay Scripti
- * Serverless ve çoklu instance uyumlu anlık yükleme ve yedekli önbellekleme
- */
-
-document.addEventListener('DOMContentLoaded', async () => {
-  const params = new URLSearchParams(window.location.search);
-  const orderNumber = params.get('order');
-
-  if (!orderNumber) {
-    window.location.href = '/shop.html';
-    return;
-  }
-
-  // 1. Önce sessionStorage'dan anlık olarak yükle (Serverless soğuk başlangıç ve örnek ayrışmalarına karşı sıfır gecikme)
-  /**
- * MultiShop Sipariş Takip & Onay Scripti
  * Gerçek Zamanlı Durum Akışı, Dinamik Başlıklar ve Çoklu Sekme Eşitlemesi
  */
 
@@ -22,28 +7,44 @@ let currentOrderData = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
-  const orderNumber = params.get('order');
+  let orderNumber = params.get('order');
+
+  // 1. Önce yerel hafızadan ve önbellekten sipariş verisini çek
+  let cachedOrder = null;
+  try {
+    if (orderNumber) {
+      const raw = sessionStorage.getItem('latest_order_' + orderNumber);
+      if (raw) cachedOrder = JSON.parse(raw);
+    }
+    if (!cachedOrder) {
+      const rawCurrent = sessionStorage.getItem('latest_order_current');
+      if (rawCurrent) {
+        cachedOrder = JSON.parse(rawCurrent);
+        if (!orderNumber && cachedOrder.order_number) {
+          orderNumber = cachedOrder.order_number;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('SessionStorage okuma hatası:', e);
+  }
 
   if (!orderNumber) {
     window.location.href = '/shop.html';
     return;
   }
 
-  // 1. Önce yerel hafızadan ve önbellekten sipariş verisini çek
-  let cachedOrder = null;
-  try {
-    const raw = sessionStorage.getItem('latest_order_' + orderNumber) || sessionStorage.getItem('latest_order_current');
-    if (raw) {
-      cachedOrder = JSON.parse(raw);
-    }
-  } catch (e) {}
-
-  // Yerel depodaki güncel durumu kontrol et
-  applyLocalStatusOverride(orderNumber, cachedOrder);
-
+  // Yerel depodaki güncel durumu kontrol et ve uygula
   if (cachedOrder) {
+    applyLocalStatusOverride(orderNumber, cachedOrder);
     currentOrderData = cachedOrder;
     renderOrderUI(cachedOrder);
+  } else {
+    // Eğer önbellek boşsa en azından sipariş numarasını hemen göster
+    const displayEl = document.getElementById('display-order-number');
+    if (displayEl) {
+      displayEl.textContent = `Sipariş No: ${orderNumber}`;
+    }
   }
 
   // 2. Sunucudan en güncel durumu sorgula
@@ -79,7 +80,7 @@ function handleStorageStatusSync(orderNumber) {
     if (syncRaw) {
       const syncData = JSON.parse(syncRaw);
       if (syncData.orderNumber === orderNumber || (currentOrderData && syncData.orderId == currentOrderData.id)) {
-        if (!currentOrderData) currentOrderData = {};
+        if (!currentOrderData) currentOrderData = { order_number: orderNumber };
         currentOrderData.status = syncData.status;
         if (syncData.trackingNumber) currentOrderData.tracking_number = syncData.trackingNumber;
         renderOrderUI(currentOrderData);
@@ -131,24 +132,24 @@ function renderOrderUI(o) {
 
   const subtotalEl = document.getElementById('summary-subtotal');
   if (subtotalEl && o.subtotal_cents !== undefined) {
-    subtotalEl.textContent = formatMoney(o.subtotal_cents);
+    subtotalEl.textContent = typeof formatMoney === 'function' ? formatMoney(o.subtotal_cents) : (o.subtotal_cents / 100).toFixed(2) + ' TL';
   }
 
   const shipEl = document.getElementById('summary-shipping');
   if (shipEl && o.shipping_cents !== undefined) {
-    shipEl.textContent = o.shipping_cents === 0 ? 'ÜCRETSİZ' : formatMoney(o.shipping_cents);
+    shipEl.textContent = o.shipping_cents === 0 ? 'ÜCRETSİZ' : (typeof formatMoney === 'function' ? formatMoney(o.shipping_cents) : (o.shipping_cents / 100).toFixed(2) + ' TL');
   }
 
   const totalEl = document.getElementById('summary-total');
   if (totalEl && o.total_cents !== undefined) {
-    totalEl.textContent = formatMoney(o.total_cents);
+    totalEl.textContent = typeof formatMoney === 'function' ? formatMoney(o.total_cents) : (o.total_cents / 100).toFixed(2) + ' TL';
   }
 
   if (o.discount_cents > 0) {
     const discRow = document.getElementById('summary-discount-row');
     const discVal = document.getElementById('summary-discount');
     if (discRow) discRow.style.display = 'flex';
-    if (discVal) discVal.textContent = `-${formatMoney(o.discount_cents)}`;
+    if (discVal) discVal.textContent = `-${typeof formatMoney === 'function' ? formatMoney(o.discount_cents) : (o.discount_cents / 100).toFixed(2) + ' TL'}`;
   }
 
   // 3. Ürün Listesi
@@ -160,9 +161,9 @@ function renderOrderUI(o) {
           ${it.product_name}
           <div class="small text-muted font-weight-normal">${it.variant_info || ''}</div>
         </td>
-        <td>${formatMoney(it.price_cents)}</td>
+        <td>${typeof formatMoney === 'function' ? formatMoney(it.price_cents) : (it.price_cents / 100).toFixed(2) + ' TL'}</td>
         <td>${it.quantity}</td>
-        <td class="text-right font-weight-bold text-primary">${formatMoney(it.total_cents || (it.price_cents * it.quantity))}</td>
+        <td class="text-right font-weight-bold text-primary">${typeof formatMoney === 'function' ? formatMoney(it.total_cents || (it.price_cents * it.quantity)) : ((it.total_cents || (it.price_cents * it.quantity)) / 100).toFixed(2) + ' TL'}</td>
       </tr>
     `).join('');
   }
@@ -274,7 +275,7 @@ function updateProgressStepper(status, trackingNumber) {
     'TESLIM_EDILDI': stepTeslim
   };
 
-  // Reset
+  // Reset all
   Object.values(elMap).forEach(el => el?.classList.remove('active', 'completed'));
 
   if (status === 'IPTAL') {
