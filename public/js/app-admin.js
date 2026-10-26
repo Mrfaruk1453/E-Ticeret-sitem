@@ -179,8 +179,39 @@ async function loadAdminOrders() {
       return;
     }
     const data = await res.json();
+    let orders = (data.success && Array.isArray(data.orders)) ? data.orders : [];
 
-    if (!data.success || !data.orders || data.orders.length === 0) {
+    // Client-side serverless auto-sync with local orders placed from this browser
+    let userOrders = [];
+    try {
+      userOrders = JSON.parse(localStorage.getItem('multishop_user_orders') || '[]');
+      const lastOrder = JSON.parse(localStorage.getItem('multishop_last_order') || 'null');
+      if (lastOrder && !userOrders.some(o => o.order_number === lastOrder.order_number)) {
+        userOrders.unshift(lastOrder);
+      }
+    } catch (e) {}
+
+    // Check if any locally placed orders are missing from the container's orders
+    const missingOrders = userOrders.filter(uo => !orders.some(o => o.order_number === uo.order_number));
+    if (missingOrders.length > 0) {
+      try {
+        const syncRes = await adminFetch('/api/admin/orders/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orders: missingOrders })
+        });
+        const syncData = await syncRes.json();
+        if (syncData.success && Array.isArray(syncData.orders)) {
+          orders = syncData.orders;
+        } else {
+          orders = [...missingOrders, ...orders];
+        }
+      } catch (syncErr) {
+        orders = [...missingOrders, ...orders];
+      }
+    }
+
+    if (orders.length === 0) {
       tbody.innerHTML = `
         <tr>
           <td colspan="6" class="py-4 text-muted">
@@ -192,7 +223,7 @@ async function loadAdminOrders() {
     }
 
     window.adminOrdersMap = new Map();
-    tbody.innerHTML = data.orders.map(order => {
+    tbody.innerHTML = orders.map(order => {
       // Serverless client-side cache overlay
       const localStatus = localStorage.getItem('admin_order_status_' + order.id);
       const localTracking = localStorage.getItem('admin_order_tracking_' + order.id);

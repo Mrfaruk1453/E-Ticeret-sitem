@@ -254,7 +254,23 @@ async function loadOrderDetails(orderNumber, fallbackOrder = null, isSilent = fa
     }
   }
 
-  if (fallbackOrder) return;
+  if (fallbackOrder) {
+    try {
+      const syncRes = await fetch('/api/orders/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order: fallbackOrder })
+      });
+      const syncData = await syncRes.json();
+      if (syncData.success && syncData.order) {
+        applyLocalStatusOverride(orderNumber, syncData.order);
+        renderOrderUI(syncData.order);
+        return;
+      }
+    } catch (e) {}
+    renderOrderUI(fallbackOrder);
+    return;
+  }
 
   const displayEl = document.getElementById('display-order-number');
   if (displayEl) displayEl.textContent = `Sipariş: ${orderNumber}`;

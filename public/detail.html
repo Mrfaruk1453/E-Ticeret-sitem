@@ -469,12 +469,35 @@
         }
 
         async function buyNowHandler() {
-            const addBtn = document.getElementById('btn-add-to-cart');
-            if (addBtn) {
-                addBtn.click();
-                setTimeout(() => {
-                    window.location.href = '/checkout.html';
-                }, 400);
+            const buyBtn = document.getElementById('btn-buy-now');
+            const origHtml = buyBtn ? buyBtn.innerHTML : '';
+            if (buyBtn) {
+                buyBtn.disabled = true;
+                buyBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Yönlendiriliyor...';
+            }
+
+            try {
+                if (typeof handleAddToCart === 'function') {
+                    const success = await handleAddToCart();
+                    if (success) {
+                        window.location.href = '/checkout.html';
+                        return;
+                    }
+                } else {
+                    const addBtn = document.getElementById('btn-add-to-cart');
+                    if (addBtn) addBtn.click();
+                    setTimeout(() => {
+                        window.location.href = '/checkout.html';
+                    }, 500);
+                    return;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
+            if (buyBtn) {
+                buyBtn.disabled = false;
+                buyBtn.innerHTML = origHtml;
             }
         }
     </script>

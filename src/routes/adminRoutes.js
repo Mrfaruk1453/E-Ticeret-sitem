@@ -124,6 +124,75 @@ router.get('/orders', (req, res) => {
   }
 });
 
+// Admin orders sync (Vercel serverless consistency)
+router.post('/orders/sync', (req, res) => {
+  try {
+    const { orders } = req.body;
+    if (Array.isArray(orders)) {
+      for (const order of orders) {
+        if (!order || !order.order_number) continue;
+        const existing = db.prepare('SELECT id FROM orders WHERE order_number = ?').get(order.order_number);
+        if (!existing) {
+          const ins = db.prepare(`
+            INSERT OR REPLACE INTO orders (
+              id, order_number, session_token, status, tracking_number,
+              customer_name, customer_email, customer_phone, shipping_address, shipping_city,
+              subtotal_cents, discount_cents, shipping_cents, total_cents, coupon_code,
+              idempotency_key, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          `).run(
+            order.id || null,
+            order.order_number,
+            order.session_token || 'serverless-sync',
+            order.status || 'ODENDI',
+            order.tracking_number || null,
+            order.customer_name || 'Ömer Faruk Üzer',
+            order.customer_email || 'farukuzer1453@gmail.com',
+            order.customer_phone || '-',
+            order.shipping_address || 'Adres',
+            order.shipping_city || 'Kahramanmaraş',
+            order.subtotal_cents || order.total_cents || 0,
+            order.discount_cents || 0,
+            order.shipping_cents || 0,
+            order.total_cents || 0,
+            order.coupon_code || null,
+            order.idempotency_key || `SYNC-${order.order_number}`,
+            order.created_at || new Date().toISOString(),
+            order.updated_at || new Date().toISOString()
+          );
+
+          const insertedOrderId = order.id || ins.lastInsertRowid;
+          if (Array.isArray(order.items)) {
+            const itemStmt = db.prepare(`
+              INSERT INTO order_items (
+                order_id, product_id, variant_id, product_name, variant_info, price_cents, quantity, total_cents
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `);
+            for (const it of order.items) {
+              try {
+                itemStmt.run(
+                  insertedOrderId,
+                  it.product_id || 1,
+                  it.variant_id || 1,
+                  it.product_name || 'Ürün',
+                  it.variant_info || '',
+                  it.price_cents || 0,
+                  it.quantity || 1,
+                  it.total_cents || (it.price_cents * (it.quantity || 1)) || 0
+                );
+              } catch (e) {}
+            }
+          }
+        }
+      }
+    }
+    const all = orderService.getAllOrders();
+    res.json({ success: true, orders: all });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Transition an order status
 router.post('/orders/:id/transition', (req, res) => {
   try {

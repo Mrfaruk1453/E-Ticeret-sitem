@@ -1,5 +1,5 @@
 const { db, transaction } = require('../config/database');
-const { getCartDetails, clearCart } = require('./cartService');
+const { getCartDetails, clearCart, addToCart, applyCouponToCart } = require('./cartService');
 const { transitionOrder, STATUSES } = require('./stateMachine');
 const { processSandboxPayment } = require('./paymentService');
 const { sendOrderConfirmationEmail } = require('./emailService');
@@ -18,15 +18,42 @@ async function checkoutOrder(sessionToken, checkoutData) {
     cardNumber,
     cardExpiry,
     cardCvv,
-    idempotencyKey
+    idempotencyKey,
+    cartItems,
+    couponCode
   } = checkoutData;
 
   if (!customerName || !customerEmail || !customerAddressValidation(shippingAddress, shippingCity)) {
     throw new Error('Lütfen tüm zorunlu müşteri ve teslimat bilgilerini eksiksiz doldurunuz.');
   }
 
-  // 1. Fetch current cart and calculate prices on server
-  const cart = getCartDetails(sessionToken);
+  // 1. Fetch current cart from SQLite
+  let cart = getCartDetails(sessionToken);
+
+  // Serverless Auto-Rehydration: Vercel multi-instance support
+  // If the request landed on a container whose SQLite has an empty cart, rehydrate from verified client payload
+  if ((!cart.items || cart.items.length === 0) && Array.isArray(cartItems) && cartItems.length > 0) {
+    for (const item of cartItems) {
+      const variantId = item.variant_id || item.id;
+      const qty = parseInt(item.quantity, 10) || 1;
+      if (variantId && qty > 0) {
+        try {
+          addToCart(sessionToken, variantId, qty);
+        } catch (e) {
+          console.warn('Rehydration addToCart note:', e.message);
+        }
+      }
+    }
+    if (couponCode) {
+      try {
+        applyCouponToCart(sessionToken, couponCode);
+      } catch (e) {
+        console.warn('Rehydration applyCoupon note:', e.message);
+      }
+    }
+    cart = getCartDetails(sessionToken);
+  }
+
   if (!cart.items || cart.items.length === 0) {
     throw new Error('Sepetiniz boş. Sipariş oluşturmak için sepetinize ürün ekleyin.');
   }

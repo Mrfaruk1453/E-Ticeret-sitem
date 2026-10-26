@@ -13,7 +13,9 @@ router.post('/', async (req, res) => {
       cardNumber,
       cardExpiry,
       cardCvv,
-      idempotencyKey
+      idempotencyKey,
+      cartItems,
+      couponCode
     } = req.body;
 
     const result = await orderService.checkoutOrder(req.sessionToken, {
@@ -25,7 +27,9 @@ router.post('/', async (req, res) => {
       cardNumber,
       cardExpiry,
       cardCvv,
-      idempotencyKey
+      idempotencyKey,
+      cartItems,
+      couponCode
     });
 
     if (result.success) {

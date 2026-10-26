@@ -12,6 +12,33 @@ router.get('/', (req, res) => {
   }
 });
 
+// Sync cart from client cache (Vercel serverless multi-instance support)
+router.post('/sync', (req, res) => {
+  try {
+    const { items, couponCode } = req.body;
+    if (Array.isArray(items) && items.length > 0) {
+      for (const it of items) {
+        const variantId = it.variant_id || it.id;
+        const qty = parseInt(it.quantity, 10) || 1;
+        if (variantId && qty > 0) {
+          try {
+            cartService.addToCart(req.sessionToken, variantId, qty);
+          } catch (e) {}
+        }
+      }
+    }
+    if (couponCode) {
+      try {
+        cartService.applyCouponToCart(req.sessionToken, couponCode);
+      } catch (e) {}
+    }
+    const cart = cartService.getCartDetails(req.sessionToken);
+    res.json({ success: true, cart, message: 'Sepet eşitlendi.' });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
 // Add item to cart
 router.post('/add', (req, res) => {
   try {

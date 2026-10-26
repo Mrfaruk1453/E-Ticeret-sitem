@@ -20,16 +20,51 @@ async function loadCheckoutSummary() {
   const totalEl = document.getElementById('checkout-total');
 
   try {
-    const res = await fetch('/api/cart');
-    const data = await res.json();
+    let res = await fetch('/api/cart');
+    let data = await res.json();
 
-    if (!data.success || !data.cart || data.cart.items.length === 0) {
+    // Vercel serverless multi-instance fallback: Check client cache if container DB was cold
+    if (!data.success || !data.cart || !data.cart.items || data.cart.items.length === 0) {
+      let cachedItems = [];
+      let cachedCoupon = '';
+      try {
+        cachedItems = JSON.parse(localStorage.getItem('multishop_cart_items') || '[]');
+        cachedCoupon = localStorage.getItem('multishop_cart_coupon') || '';
+      } catch (e) {}
+
+      if (cachedItems.length > 0) {
+        // Attempt to sync cached cart items to this container
+        try {
+          const syncRes = await fetch('/api/cart/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: cachedItems, couponCode: cachedCoupon })
+          });
+          const syncData = await syncRes.json();
+          if (syncData.success && syncData.cart && syncData.cart.items && syncData.cart.items.length > 0) {
+            data = syncData;
+          }
+        } catch (syncErr) {
+          console.warn('Cart sync attempt note:', syncErr);
+        }
+      }
+    }
+
+    if (!data.success || !data.cart || !data.cart.items || data.cart.items.length === 0) {
       alert('Sepetiniz boş. Lütfen önce ürün ekleyiniz.');
       window.location.href = '/cart.html';
       return;
     }
 
     currentCart = data.cart;
+
+    // Persist active cart items to client storage for serverless resiliency
+    try {
+      localStorage.setItem('multishop_cart_items', JSON.stringify(currentCart.items));
+      if (currentCart.coupon) {
+        localStorage.setItem('multishop_cart_coupon', currentCart.coupon.code);
+      }
+    } catch (e) {}
 
     if (container) {
       container.innerHTML = currentCart.items.map(item => `
@@ -118,6 +153,20 @@ function setupCheckoutForm() {
       return;
     }
 
+    // Prepare resilient cart items payload
+    let cartItemsToSend = [];
+    if (currentCart && currentCart.items && currentCart.items.length > 0) {
+      cartItemsToSend = currentCart.items.map(it => ({ variant_id: it.variant_id, quantity: it.quantity }));
+    } else {
+      try {
+        const cached = JSON.parse(localStorage.getItem('multishop_cart_items') || '[]');
+        cartItemsToSend = cached.map(it => ({ variant_id: it.variant_id || it.id, quantity: it.quantity || 1 }));
+      } catch (e) {}
+    }
+
+    const couponCodeToSend = (currentCart && currentCart.coupon ? currentCart.coupon.code : null) ||
+                             localStorage.getItem('multishop_cart_coupon') || null;
+
     const customerName = `${firstName} ${lastName}`;
     const origBtnHtml = submitBtn.innerHTML;
     submitBtn.disabled = true;
@@ -135,7 +184,9 @@ function setupCheckoutForm() {
           shippingCity: city,
           cardNumber,
           cardExpiry,
-          cardCvv
+          cardCvv,
+          cartItems: cartItemsToSend,
+          couponCode: couponCodeToSend
         })
       });
 
@@ -147,7 +198,24 @@ function setupCheckoutForm() {
           if (!fullOrder.items && data.items) fullOrder.items = data.items;
           sessionStorage.setItem('latest_order_' + data.orderNumber, JSON.stringify(fullOrder));
           sessionStorage.setItem('latest_order_current', JSON.stringify(fullOrder));
+          localStorage.setItem('multishop_last_order', JSON.stringify(fullOrder));
+
+          // Save to user orders list in localStorage for instant admin panel visibility
+          let userOrders = [];
+          try {
+            userOrders = JSON.parse(localStorage.getItem('multishop_user_orders') || '[]');
+          } catch (e) {}
+          // Prepend new order if not already in list
+          if (!userOrders.some(o => o.order_number === data.orderNumber)) {
+            userOrders.unshift(fullOrder);
+            localStorage.setItem('multishop_user_orders', JSON.stringify(userOrders));
+          }
+
+          // Clear cart storage
+          localStorage.removeItem('multishop_cart_items');
+          localStorage.removeItem('multishop_cart_coupon');
         } catch (e) {}
+
         showToast('Ödemeniz onaylandı! Sipariş sayfasına yönlendiriliyorsunuz...', 'success');
         setTimeout(() => {
           window.location.href = `/order-success.html?order=${data.orderNumber}`;

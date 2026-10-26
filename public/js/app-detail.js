@@ -299,12 +299,12 @@ function onVariantSelectionChanged() {
 async function handleAddToCart() {
   if (!selectedVariant) {
     showToast('Lütfen geçerli bir varyant seçiniz.', 'error');
-    return;
+    return false;
   }
 
   if (selectedVariant.stock <= 0) {
     showToast('Bu ürünün seçilen varyantı tükenmiştir.', 'error');
-    return;
+    return false;
   }
 
   const qtyInput = document.getElementById('product-quantity-input');
@@ -312,13 +312,15 @@ async function handleAddToCart() {
 
   if (quantity > selectedVariant.stock) {
     showToast(`Stok miktarından fazla ürün ekleyemezsiniz (Maks: ${selectedVariant.stock}).`, 'error');
-    return;
+    return false;
   }
 
   const btn = document.getElementById('btn-add-to-cart');
-  const origText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Ekleniyor...';
+  const origText = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Ekleniyor...';
+  }
 
   try {
     const res = await fetch('/api/cart/add', {
@@ -333,20 +335,41 @@ async function handleAddToCart() {
     const data = await res.json();
     if (data.success) {
       showToast(`✨ ${currentProduct.name} (${selectedVariant.size}/${selectedVariant.color}) sepete eklendi!`, 'success');
+      
+      // Update client-side cache for serverless resiliency
+      if (data.cart && data.cart.items) {
+        try {
+          localStorage.setItem('multishop_cart_items', JSON.stringify(data.cart.items));
+        } catch (e) {}
+      } else {
+        try {
+          let cached = JSON.parse(localStorage.getItem('multishop_cart_items') || '[]');
+          cached.push({ variant_id: selectedVariant.id, quantity });
+          localStorage.setItem('multishop_cart_items', JSON.stringify(cached));
+        } catch (e) {}
+      }
+
       updateNavCartBadge();
       if (typeof openCartDrawer === 'function') {
         openCartDrawer();
       }
+      return true;
     } else {
       showToast(data.error || 'Sepete eklenirken hata oluştu.', 'error');
+      return false;
     }
   } catch (err) {
     showToast('Bağlantı hatası oluştu.', 'error');
+    return false;
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = origText;
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origText;
+    }
   }
 }
+
+window.handleAddToCart = handleAddToCart;
 
 function renderRelatedProducts(related) {
   const container = document.getElementById('related-products-container');

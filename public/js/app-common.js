@@ -15,13 +15,33 @@ function formatMoney(cents) {
 // Navigasyon çubuğundaki sepet sayacını günceller
 async function updateNavCartBadge() {
   try {
-    const res = await fetch('/api/cart');
-    const data = await res.json();
+    let res = await fetch('/api/cart');
+    let data = await res.json();
+
+    // Multi-instance serverless resilience: if server cart is empty but local cache has items, auto-sync
+    if (data.success && (!data.cart || !data.cart.items || data.cart.items.length === 0)) {
+      try {
+        const cached = JSON.parse(localStorage.getItem('multishop_cart_items') || '[]');
+        const coupon = localStorage.getItem('multishop_cart_coupon') || '';
+        if (cached.length > 0) {
+          const syncRes = await fetch('/api/cart/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: cached, couponCode: coupon })
+          });
+          const syncData = await syncRes.json();
+          if (syncData.success && syncData.cart) {
+            data = syncData;
+          }
+        }
+      } catch (e) {}
+    }
+
     if (data.success && data.cart) {
       const badges = document.querySelectorAll('.cart-badge');
+      const newCount = data.cart.item_count || 0;
       badges.forEach(b => {
         const prevCount = parseInt(b.textContent || '0', 10);
-        const newCount = data.cart.item_count || 0;
         b.textContent = newCount;
         if (newCount !== prevCount) {
           b.classList.remove('badge-bounce');
@@ -29,6 +49,16 @@ async function updateNavCartBadge() {
           b.classList.add('badge-bounce');
         }
       });
+
+      if (data.cart.items && data.cart.items.length > 0) {
+        try {
+          localStorage.setItem('multishop_cart_items', JSON.stringify(data.cart.items));
+          if (data.cart.coupon) {
+            localStorage.setItem('multishop_cart_coupon', data.cart.coupon.code);
+          }
+        } catch (e) {}
+      }
+
       return data.cart;
     }
   } catch (err) {
