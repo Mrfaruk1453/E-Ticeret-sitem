@@ -127,11 +127,53 @@ router.get('/orders', (req, res) => {
 // Transition an order status
 router.post('/orders/:id/transition', (req, res) => {
   try {
-    const { to_status, tracking_number, note } = req.body;
-    const orderId = parseInt(req.params.id, 10);
+    const { to_status, tracking_number, note, order_number, order_data } = req.body;
+    let orderId = parseInt(req.params.id, 10);
 
     if (!to_status) {
       return res.status(400).json({ success: false, error: 'Hedef durum (to_status) belirtilmelidir.' });
+    }
+
+    // Serverless instance auto-rehydration check
+    let existing = db.prepare('SELECT id FROM orders WHERE id = ?').get(orderId);
+    if (!existing && order_number) {
+      existing = db.prepare('SELECT id FROM orders WHERE order_number = ?').get(order_number);
+      if (existing) orderId = existing.id;
+    }
+
+    if (!existing && (order_data || order_number)) {
+      const data = order_data || {};
+      const ordNum = data.order_number || order_number || `ORD-${orderId}`;
+      db.prepare(`
+        INSERT OR REPLACE INTO orders (
+          id, order_number, session_token, status, tracking_number,
+          customer_name, customer_email, customer_phone, shipping_address, shipping_city,
+          subtotal_cents, discount_cents, shipping_cents, total_cents, coupon_code,
+          idempotency_key, created_at, updated_at
+        ) VALUES (
+          ?, ?, ?, ?, ?,
+          ?, ?, ?, ?, ?,
+          ?, ?, ?, ?, ?,
+          ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        )
+      `).run(
+        orderId,
+        ordNum,
+        data.session_token || 'serverless-sync',
+        data.status || 'ODENDI',
+        tracking_number || data.tracking_number || null,
+        data.customer_name || 'Ömer Faruk Üzer',
+        data.customer_email || 'farukuzer1453@gmail.com',
+        data.customer_phone || '-',
+        data.shipping_address || 'Adres',
+        data.shipping_city || 'Kahramanmaraş',
+        data.subtotal_cents || data.total_cents || 0,
+        data.discount_cents || 0,
+        data.shipping_cents || 0,
+        data.total_cents || 0,
+        data.coupon_code || null,
+        `SYNC-${orderId}`
+      );
     }
 
     const result = transitionOrder(orderId, to_status, {
@@ -139,7 +181,8 @@ router.post('/orders/:id/transition', (req, res) => {
       note
     });
 
-    const updatedOrder = orderService.getOrderByNumber(db.prepare('SELECT order_number FROM orders WHERE id = ?').get(orderId).order_number);
+    const updatedRow = db.prepare('SELECT order_number FROM orders WHERE id = ?').get(orderId);
+    const updatedOrder = updatedRow ? orderService.getOrderByNumber(updatedRow.order_number) : { id: orderId, status: to_status, tracking_number };
 
     res.json({
       success: true,

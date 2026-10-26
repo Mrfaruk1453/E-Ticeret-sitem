@@ -191,6 +191,7 @@ async function loadAdminOrders() {
       return;
     }
 
+    window.adminOrdersMap = new Map();
     tbody.innerHTML = data.orders.map(order => {
       // Serverless client-side cache overlay
       const localStatus = localStorage.getItem('admin_order_status_' + order.id);
@@ -198,6 +199,7 @@ async function loadAdminOrders() {
       if (localStatus) order.status = localStatus;
       if (localTracking) order.tracking_number = localTracking;
 
+      window.adminOrdersMap.set(String(order.id), order);
       const statusClass = `status-${order.status}`;
       const actionButtons = renderTransitionButtons(order);
 
@@ -313,36 +315,45 @@ function renderTransitionButtons(order) {
 
 async function executeTransition(orderId, toStatus, meta = {}) {
   try {
+    const orderObj = (window.adminOrdersMap && window.adminOrdersMap.get(String(orderId))) || {};
+    const effectiveTracking = meta.tracking_number || orderObj.tracking_number || localStorage.getItem('admin_order_tracking_' + orderId) || '';
+
     const res = await adminFetch(`/api/admin/orders/${orderId}/transition`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to_status: toStatus,
-        tracking_number: meta.tracking_number,
-        note: meta.note || 'Yönetici panelinden durum güncellendi.'
+        tracking_number: effectiveTracking,
+        note: meta.note || 'Yönetici panelinden durum güncellendi.',
+        order_number: orderObj.order_number,
+        order_data: orderObj
       })
     });
 
     const data = await res.json();
     if (data.success) {
       try {
-        const ordNum = (data.order && data.order.order_number) || '';
+        const ordNum = (data.order && data.order.order_number) || orderObj.order_number || '';
         localStorage.setItem('admin_order_status_' + orderId, toStatus);
         if (ordNum) {
           localStorage.setItem('order_status_' + ordNum, toStatus);
         }
-        if (meta.tracking_number) {
-          localStorage.setItem('admin_order_tracking_' + orderId, meta.tracking_number);
+        if (effectiveTracking) {
+          localStorage.setItem('admin_order_tracking_' + orderId, effectiveTracking);
           if (ordNum) {
-            localStorage.setItem('order_tracking_' + ordNum, meta.tracking_number);
+            localStorage.setItem('order_tracking_' + ordNum, effectiveTracking);
           }
+        }
+        if (orderObj) {
+          orderObj.status = toStatus;
+          if (effectiveTracking) orderObj.tracking_number = effectiveTracking;
         }
         // Broadcast storage change across open browser tabs
         localStorage.setItem('order_status_sync', JSON.stringify({
           orderId,
           orderNumber: ordNum,
           status: toStatus,
-          trackingNumber: meta.tracking_number || (data.order && data.order.tracking_number),
+          trackingNumber: effectiveTracking,
           timestamp: Date.now()
         }));
       } catch (e) {}
