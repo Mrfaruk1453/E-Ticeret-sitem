@@ -1,0 +1,41 @@
+# MultiShop E-Ticaret Platformu
+
+> MultiShop, modern, güvenli ve kuruş bazlı hesaplama mimarisine sahip lüks moda, giyim ve aksesuar e-ticaret platformudur. 6698 sayılı KVKK ve 6502 sayılı Tüketicinin Korunması Kanunu'na tam uyumlu olarak hizmet verir.
+
+## Genel Bilgiler
+- **Web Sitesi:** https://e-ticeret-sitem.vercel.app/
+- **Sektör:** Moda, Hazır Giyim, Takım Elbise, Ayakkabı, Çocuk Giyimi, Aksesuar
+- **Para Birimi:** Türk Lirası (TRY / TL) - Kuruş bazlı integer hesaplama
+- **Kargo Politikası:** 500 TL üzeri tüm siparişlerde Ücretsiz Standart Kargo (1-2 iş günü teslimat)
+- **İade Politikası:** 14 Gün Koşulsuz Cayma Hakkı ve Ücretsiz İade
+- **Ödeme:** 256-Bit SSL, 3D Secure Kredi/Banka Kartı ve Havale/EFT
+
+## Ana Sayfalar ve Dokümantasyon
+- [Anasayfa](https://e-ticeret-sitem.vercel.app/): Kampanyalar, öne çıkan koleksiyonlar ve yeni gelenler.
+- [Ürün Kataloğu / Mağaza](https://e-ticeret-sitem.vercel.app/shop.html): Kategori, fiyat ve özellik filtrelemeli tam ürün listesi.
+- [Hakkımızda](https://e-ticeret-sitem.vercel.app/hakkinda.html): MultiShop şirket hikayesi, vizyon ve misyon ilkeleri.
+- [Sıkça Sorulan Sorular (SSS)](https://e-ticeret-sitem.vercel.app/sss.html): Sipariş, kargo, ödeme ve iade süreçleri hakkında cevaplar.
+- [Yardım & İade Rehberi](https://e-ticeret-sitem.vercel.app/yardim.html): 4 adımlı iade süreci ve kargo takip rehberi.
+- [Gizlilik Politikası ve KVKK](https://e-ticeret-sitem.vercel.app/gizlilik.html): 6698 sayılı kanun aydınlatma metni ve çerez politikası.
+- [Kullanım Şartları](https://e-ticeret-sitem.vercel.app/kullanim-kosullari.html): Mesafeli satış ve üyelik şartları.
+- [İletişim](https://e-ticeret-sitem.vercel.app/contact.html): Müşteri destek hattı, e-posta ve Osmaniye Korkut Ata Üniversitesi yerleşkesi.
+
+## Ürün Kategorileri
+- **Kadın Elbiseleri:** Abiye, günlük zarif elbiseler, triko ve bluzlar (`/shop.html?category=kadin-elbise`)
+- **Erkek Takım Elbiseleri:** İtalyan kesim kruvaze takım elbiseler, ceketler ve smokinler (`/shop.html?category=erkek-takim-elbise`)
+- **Bebek & Çocuk Giyim:** Organik pamuklu bebek tulumları ve çocuk giyim setleri (`/shop.html?category=bebek-giyim`)
+- **Ayakkabı Koleksiyonu:** Klasik deri ayakkabılar, sneaker ve topuklu modeller (`/shop.html?category=ayakkabi`)
+- **Çanta & Aksesuar:** Hakiki deri çantalar, kemerler ve lüks takılar (`/shop.html?category=aksesuar`)
+
+## AI Ajanları için REST API Rehberi
+MultiShop, yapay zeka ajanlarının ve entegrasyonların okuma yapabilmesi için temiz JSON REST API uçları sunar:
+
+- `GET /api/products`: Ürün kataloğunu listeler.
+  - Parametreler: `category` (slug), `q` (arama metni), `sort` (price_asc, price_desc, newest), `page`, `limit`
+- `GET /api/products/:slugOrId`: Belirtilen ürünün varyantları, anlık stokları, fiyatı ve özelliklerini döndürür.
+- `GET /api/categories`: Aktif ürün kategorilerini listeler.
+- `GET /sitemap.xml`: Tüm taranabilir sayfaların dinamik XML haritası.
+
+## Gelişmiş Bilgi
+Daha detaylı API modelleri, veri şemaları ve entegrasyon kuralları için:
+- [Genişletilmiş Doküman (llms-full.txt)](https://e-ticeret-sitem.vercel.app/llms-full.txt)

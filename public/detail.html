@@ -1,10 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
     <meta charset="utf-8">
-    <title>Ürün Detayı - MultiShop</title>
+    <title>Ürün Detayı | MultiShop Lüks Moda</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="MultiShop kaliteli kumaş ve modern kesim ürün detaylarını inceleyin, beden ve renk seçiminizi yaparak hemen sipariş verin.">
+    <link rel="canonical" href="https://e-ticeret-sitem.vercel.app/detail.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="product">
+    <meta property="og:site_name" content="MultiShop">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:title" content="Ürün Detayı | MultiShop">
+    <meta property="og:description" content="MultiShop seçkin kumaş kalitesi ve modern kesimlerini inceleyin.">
+    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ürün Detayı | MultiShop">
+    <meta name="twitter:description" content="MultiShop seçkin kumaş kalitesi ve modern kesimlerini inceleyin.">
+    <meta name="twitter:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +72,7 @@
             <div class="col-lg-5 text-center text-lg-right">
                 <button type="button" class="btn btn-sm btn-primary font-weight-bold open-cart-drawer-trigger" style="border-radius: 6px;">
                     <i class="fa fa-shopping-cart mr-1"></i> Sepetim (<span class="cart-badge">0</span>)
-                </a>
+                </button>
             </div>
         </div>
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
@@ -191,7 +209,8 @@
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30 shadow-sm" style="border-radius: 8px;">
                     <small class="text-muted product-category font-weight-bold text-uppercase"></small>
-                    <h3 class="product-title font-weight-bold mt-1 mb-2">Ürün Yükleniyor...</h3>
+                    <!-- H1 Semantic Main Heading -->
+                    <h1 class="product-title h3 font-weight-bold mt-1 mb-2">Ürün Yükleniyor...</h1>
                     
                     <div class="d-flex align-items-center mb-3">
                         <div class="text-primary mr-2">
@@ -207,7 +226,7 @@
                         <span id="variant-sku-display" class="small text-muted font-weight-bold"></span>
                     </div>
 
-                    <h3 class="font-weight-bold text-primary mb-3" id="product-price">0,00 TL</h3>
+                    <h2 class="h3 font-weight-bold text-primary mb-3" id="product-price">0,00 TL</h2>
                     
                     <p class="mb-4 text-secondary" id="product-description" style="line-height: 1.6;">Açıklama yükleniyor...</p>
 
@@ -231,29 +250,53 @@
                         <div id="variant-colors-container" class="d-flex flex-wrap"></div>
                     </div>
 
-                    <!-- Adet ve Sepete Ekle -->
-                    <div class="d-flex align-items-center mb-4 pt-2">
-                        <div class="input-group quantity mr-3" style="width: 130px;">
+                    <!-- Adet, Sepete Ekle ve Hemen Satın Al (Net CTA) -->
+                    <div class="d-flex flex-wrap align-items-center mb-4 pt-2" style="gap: 12px;">
+                        <div class="input-group quantity" style="width: 130px;">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary" id="btn-qty-minus">
+                                <button class="btn btn-primary" id="btn-qty-minus" aria-label="Adeti Azalt">
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" id="product-quantity-input" class="form-control bg-secondary border-0 text-center font-weight-bold" value="1" readonly>
+                            <input type="text" id="product-quantity-input" class="form-control bg-secondary border-0 text-center font-weight-bold" value="1" readonly aria-label="Ürün Miktarı">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary" id="btn-qty-plus">
+                                <button class="btn btn-primary" id="btn-qty-plus" aria-label="Adeti Artır">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary px-4 font-weight-bold" id="btn-add-to-cart">
+                        <button class="btn btn-primary px-4 py-2 font-weight-bold" id="btn-add-to-cart">
                             <i class="fa fa-shopping-cart mr-1"></i> Sepete Ekle
+                        </button>
+                        <button class="btn btn-dark px-4 py-2 font-weight-bold" id="btn-buy-now" onclick="buyNowHandler()">
+                            <i class="fa fa-bolt mr-1 text-primary"></i> Hemen Satın Al
                         </button>
                     </div>
 
+                    <!-- 18. Sosyal Paylaşım Butonları -->
+                    <div class="d-flex align-items-center pt-3 border-top mb-3">
+                        <strong class="text-dark mr-3 small font-weight-bold"><i class="fa fa-share-alt text-primary mr-1"></i>Paylaş:</strong>
+                        <div class="d-inline-flex" style="gap: 6px;">
+                            <a class="btn btn-sm btn-outline-success font-weight-bold px-2 py-1" id="share-whatsapp" href="javascript:void(0)" onclick="shareProduct('whatsapp')" title="WhatsApp ile Paylaş" aria-label="WhatsApp'ta Paylaş">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                            <a class="btn btn-sm btn-outline-dark font-weight-bold px-2 py-1" id="share-twitter" href="javascript:void(0)" onclick="shareProduct('twitter')" title="X / Twitter ile Paylaş" aria-label="X'te Paylaş">
+                                <i class="fab fa-twitter"></i> X
+                            </a>
+                            <a class="btn btn-sm btn-outline-primary font-weight-bold px-2 py-1" id="share-facebook" href="javascript:void(0)" onclick="shareProduct('facebook')" title="Facebook ile Paylaş" aria-label="Facebook'ta Paylaş">
+                                <i class="fab fa-facebook-f"></i> Paylaş
+                            </a>
+                            <button class="btn btn-sm btn-outline-secondary font-weight-bold px-2 py-1" type="button" onclick="copyProductLink()" title="Linki Kopyala" aria-label="Sayfa Bağlantısını Kopyala">
+                                <i class="fa fa-link"></i> Link Kopyala
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="border-top pt-3">
-                        <div class="d-flex align-items-center text-muted small">
-                            <i class="fa fa-shield-alt text-success mr-2"></i> Güvenli Alışveriş &bull; Kuruş Tamsayı Stok Bütünlüğü
+                        <div class="d-flex flex-wrap align-items-center text-muted small" style="gap: 16px;">
+                            <span><i class="fa fa-shield-alt text-success mr-1"></i> 256-Bit SSL Güvenli Ödeme</span>
+                            <span><i class="fa fa-truck text-primary mr-1"></i> 500 TL Üzeri Ücretsiz Kargo</span>
+                            <span><i class="fa fa-undo-alt text-warning mr-1"></i> 14 Gün Kolay İade</span>
                         </div>
                     </div>
                 </div>
@@ -322,44 +365,42 @@
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Hızlı Alışveriş</h5>
+                        <h5 class="text-secondary text-uppercase mb-4">Kurumsal & Yasal</h5>
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>Anasayfa</a>
-                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Mağazamız</a>
-                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Ürün Detayı</a>
-                            <a class="text-secondary mb-2" href="/cart.html"><i class="fa fa-angle-right mr-2"></i>Alışveriş Sepeti</a>
-                            <a class="text-secondary mb-2" href="/checkout.html"><i class="fa fa-angle-right mr-2"></i>Ödeme Yap</a>
+                            <a class="text-secondary mb-2" href="/hakkinda.html"><i class="fa fa-angle-right mr-2"></i>Hakkımızda</a>
+                            <a class="text-secondary mb-2" href="/gizlilik.html"><i class="fa fa-angle-right mr-2 text-primary"></i>Gizlilik Politikası</a>
+                            <a class="text-secondary mb-2" href="/kullanim-kosullari.html"><i class="fa fa-angle-right mr-2 text-primary"></i>Kullanım Şartları</a>
                             <a class="text-secondary" href="/contact.html"><i class="fa fa-angle-right mr-2"></i>İletişim</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Hesabım</h5>
+                        <h5 class="text-secondary text-uppercase mb-4">Müşteri Hizmetleri</h5>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>Anasayfa</a>
                             <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Mağazamız</a>
-                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Ürün Detayı</a>
                             <a class="text-secondary mb-2" href="/cart.html"><i class="fa fa-angle-right mr-2"></i>Alışveriş Sepeti</a>
                             <a class="text-secondary mb-2" href="/checkout.html"><i class="fa fa-angle-right mr-2"></i>Ödeme Yap</a>
-                            <a class="text-secondary" href="/contact.html"><i class="fa fa-angle-right mr-2"></i>İletişim</a>
+                            <a class="text-secondary mb-2" href="/sss.html"><i class="fa fa-angle-right mr-2"></i>Sık Sorulan Sorular</a>
+                            <a class="text-secondary" href="/yardim.html"><i class="fa fa-angle-right mr-2"></i>Yardım & İade</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
                         <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
-                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                        <form class="newsletter-form" action="/api/newsletter" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <input type="email" name="email" class="form-control" placeholder="E-posta Adresiniz" required aria-label="E-posta Adresiniz">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                    <button class="btn btn-primary font-weight-bold px-3" type="submit">Abone Ol</button>
                                 </div>
                             </div>
                         </form>
                         <h6 class="text-secondary text-uppercase mt-4 mb-3">Bizi Takip Edin</h6>
                         <div class="d-flex">
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-primary btn-square" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -392,6 +433,51 @@
     <script src="js/main.js"></script>
     <script src="js/app-common.js"></script>
     <script src="js/app-detail.js"></script>
+    <script src="js/cookie-consent.js"></script>
+    <script src="js/analytics.js"></script>
+
+    <!-- Social Share & Buy Now Handlers -->
+    <script>
+        function shareProduct(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            let shareUrl = '';
+
+            if (platform === 'whatsapp') {
+                shareUrl = `https://api.whatsapp.com/send?text=${title}%20${url}`;
+            } else if (platform === 'twitter') {
+                shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
+            } else if (platform === 'facebook') {
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            }
+
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=450');
+            }
+        }
+
+        function copyProductLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                if (window.showToast) {
+                    window.showToast('📋 Ürün bağlantısı panoya kopyalandı!', 'success');
+                } else {
+                    alert('Ürün bağlantısı panoya kopyalandı!');
+                }
+            }).catch(() => {
+                prompt('Ürün bağlantısı:', window.location.href);
+            });
+        }
+
+        async function buyNowHandler() {
+            const addBtn = document.getElementById('btn-add-to-cart');
+            if (addBtn) {
+                addBtn.click();
+                setTimeout(() => {
+                    window.location.href = '/checkout.html';
+                }, 400);
+            }
+        }
+    </script>
 </body>
 
 </html>

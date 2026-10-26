@@ -71,4 +71,31 @@ router.get('/home', (req, res) => {
   }
 });
 
+// Newsletter subscription endpoint
+router.post('/newsletter', (req, res) => {
+  try {
+    const { email } = req.body || {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || typeof email !== 'string' || !emailRegex.test(email.trim())) {
+      return res.status(400).json({ success: false, error: 'Lütfen geçerli bir e-posta adresi girin.' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const { db } = require('../config/database');
+    const existing = db.prepare('SELECT id FROM subscribers WHERE email = ?').get(cleanEmail);
+    if (existing) {
+      return res.json({ success: true, message: 'Bu e-posta adresi zaten bültenimize kayıtlı. İlginiz için teşekkürler!' });
+    }
+
+    db.prepare('INSERT INTO subscribers (email) VALUES (?)').run(cleanEmail);
+    return res.json({ 
+      success: true, 
+      message: 'Tebrikler! MultiShop bültenine başarıyla abone oldunuz. İlk siparişinize özel %20 indirim kuponunuz: OGRENCI20' 
+    });
+  } catch (err) {
+    console.error('Newsletter error:', err);
+    res.status(500).json({ success: false, error: 'Bülten kaydı sırasında bir hata oluştu.' });
+  }
+});
+
 module.exports = router;

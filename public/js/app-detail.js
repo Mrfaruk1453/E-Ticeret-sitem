@@ -10,7 +10,10 @@ let selectedVariant = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug') || params.get('id');
+  let slug = params.get('slug') || params.get('id');
+  if (!slug && window.location.pathname.startsWith('/urun/')) {
+    slug = window.location.pathname.replace('/urun/', '').split('/')[0];
+  }
 
   if (!slug) {
     window.location.href = '/shop.html';
@@ -44,7 +47,111 @@ async function loadProductDetail(slug) {
 
 function renderProductDetail(p) {
   // Update breadcrumbs and titles
-  document.title = `${p.name} - MultiShop`;
+  
+  // Dynamic SEO Meta Tags
+  document.title = `${p.name} | MultiShop Lüks Moda`;
+
+  let descMeta = document.querySelector('meta[name="description"]');
+  if (!descMeta) {
+    descMeta = document.createElement('meta');
+    descMeta.name = 'description';
+    document.head.appendChild(descMeta);
+  }
+  const cleanDesc = (p.description || `${p.name} en seçkin kumaş kalitesi ve modern kesimleriyle MultiShop'ta.`).substring(0, 160);
+  descMeta.content = cleanDesc;
+
+  let canonicalLink = document.querySelector('link[rel="canonical"]');
+  if (!canonicalLink) {
+    canonicalLink = document.createElement('link');
+    canonicalLink.rel = 'canonical';
+    document.head.appendChild(canonicalLink);
+  }
+  canonicalLink.href = `https://e-ticeret-sitem.vercel.app/detail.html?slug=${p.slug}`;
+
+  const setMetaProp = (prop, val) => {
+    let el = document.querySelector(`meta[property="${prop}"]`);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute('property', prop);
+      document.head.appendChild(el);
+    }
+    el.content = val;
+  };
+  setMetaProp('og:title', `${p.name} | MultiShop`);
+  setMetaProp('og:description', cleanDesc);
+  setMetaProp('og:image', p.image || 'https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg');
+  setMetaProp('og:url', `https://e-ticeret-sitem.vercel.app/detail.html?slug=${p.slug}`);
+
+  // Inject Product & Breadcrumb JSON-LD Schema
+  let schemaScript = document.getElementById('product-jsonld');
+  if (!schemaScript) {
+    schemaScript = document.createElement('script');
+    schemaScript.id = 'product-jsonld';
+    schemaScript.type = 'application/ld+json';
+    document.head.appendChild(schemaScript);
+  }
+
+  const inStock = (p.total_stock > 0);
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": `https://e-ticeret-sitem.vercel.app/detail.html?slug=${p.slug}#product`,
+        "name": p.name,
+        "image": [p.image || "https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg"],
+        "description": p.description || p.name,
+        "sku": (p.variants && p.variants[0] && p.variants[0].sku) ? p.variants[0].sku : `MS-${p.id}`,
+        "brand": {
+          "@type": "Brand",
+          "name": "MultiShop"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "TRY",
+          "price": (p.base_price_cents / 100).toFixed(2),
+          "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "url": `https://e-ticeret-sitem.vercel.app/detail.html?slug=${p.slug}`,
+          "seller": {
+            "@type": "Organization",
+            "name": "MultiShop"
+          }
+        },
+        ...(p.review_count > 0 ? {
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": p.rating ? p.rating.toFixed(1) : "5.0",
+            "reviewCount": p.review_count
+          }
+        } : {})
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Anasayfa",
+            "item": "https://e-ticeret-sitem.vercel.app/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": p.category_name || "Koleksiyon",
+            "item": `https://e-ticeret-sitem.vercel.app/shop.html?category=${p.category_slug}`
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": p.name,
+            "item": `https://e-ticeret-sitem.vercel.app/detail.html?slug=${p.slug}`
+          }
+        ]
+      }
+    ]
+  };
+  schemaScript.textContent = JSON.stringify(productSchema, null, 2);
+
   const nameEls = document.querySelectorAll('.product-title');
   nameEls.forEach(el => el.textContent = p.name);
 

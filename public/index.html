@@ -3,23 +3,35 @@
 
 <head>
     <meta charset="utf-8">
-    <title>MultiShop - E-Ticaret Sitesi (Katalog, Sepet ve Ödeme)</title>
+    <title>MultiShop | Lüks Moda & E-Ticaret - Erkek, Kadın ve Çocuk Koleksiyonu</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı E-Ticaret Projesi" name="keywords">
-    <meta content="E-Ticaret Sitesi: Katalog, Sepet, Ödeme ve Durum Makinesi" name="description">
+    <meta name="description" content="MultiShop ile sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonlarını keşfedin. Hızlı teslimat, 14 gün kolay iade ve güvenli ödeme.">
+    <meta name="keywords" content="moda, e-ticaret, kadın elbiseleri, erkek takım elbise, çocuk modası, ayakkabı, ceket, multishop">
+    <link rel="canonical" href="https://e-ticeret-sitem.vercel.app/">
     <meta name="google-site-verification" content="PNcAgb-suGGjMU_taT6PKtDBSQ0BEbVJN_1wiACRc2A" />
+
+    <!-- Performance LCP Preload -->
+    <link rel="preload" as="image" href="img/carousel-1.jpg">
 
     <!-- Open Graph / Sosyal Medya Paylaşım Önizlemesi -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MultiShop">
+    <meta property="og:locale" content="tr_TR">
     <meta property="og:url" content="https://e-ticeret-sitem.vercel.app/">
-    <meta property="og:title" content="MultiShop - E-Ticaret Sitesi">
-    <meta property="og:description" content="Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı E-Ticaret Projesi: Katalog, Sepet ve Ödeme">
-    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/logo.png">
+    <meta property="og:title" content="MultiShop | Lüks Moda & E-Ticaret">
+    <meta property="og:description" content="Sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonları.">
+    <meta property="og:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MultiShop | Lüks Moda & E-Ticaret">
+    <meta name="twitter:description" content="Sezonun en seçkin kruvaze İtalyan takım elbiseleri, zarif kadın elbiseleri ve organik bebek koleksiyonları.">
+    <meta name="twitter:image" content="https://e-ticeret-sitem.vercel.app/img/carousel-1.jpg">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
 
-    <!-- Google Web Fonts -->
+    <!-- Google Web Fonts with font-display: swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
@@ -33,9 +45,49 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- Schema.org JSON-LD Structured Data (Organization & WebSite) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://e-ticeret-sitem.vercel.app/#organization",
+          "name": "MultiShop",
+          "url": "https://e-ticeret-sitem.vercel.app/",
+          "logo": "https://e-ticeret-sitem.vercel.app/img/logo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+90-551-351-4680",
+            "contactType": "customer service",
+            "areaServed": "TR",
+            "availableLanguage": ["Turkish"]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://e-ticeret-sitem.vercel.app/#website",
+          "url": "https://e-ticeret-sitem.vercel.app/",
+          "name": "MultiShop",
+          "description": "Lüks Moda & E-Ticaret Mağazası",
+          "publisher": {
+            "@id": "https://e-ticeret-sitem.vercel.app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://e-ticeret-sitem.vercel.app/shop.html?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 
 <body>
+    <!-- Accessibility: Skip to Main Content -->
+    <a href="#main-content" class="sr-only sr-only-focusable p-2 bg-primary text-dark font-weight-bold" style="position: absolute; z-index: 10000; top: 10px; left: 10px;">İçeriğe Atla</a>
     <!-- Top Announcement Bar Start -->
     <div class="announcement-bar text-center">
         <span class="announcement-badge">YENİ SEZON</span>
@@ -54,19 +106,19 @@
             <div class="col-lg-7 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center">
                     <a href="/hakkinda.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
-                        <img src="img/icon-hakkinda.png" alt="Hakkında" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <img decoding="async" src="img/icon-hakkinda.png" alt="Hakkında" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
                         <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Hakkında</span>
                     </a>
                     <a href="/contact.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
-                        <img src="img/icon-temas.png" alt="İletişim" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <img decoding="async" src="img/icon-temas.png" alt="İletişim" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
                         <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">İletişim</span>
                     </a>
                     <a href="/yardim.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none mr-3 mr-xl-4">
-                        <img src="img/icon-yardim.png" alt="Yardım" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <img decoding="async" src="img/icon-yardim.png" alt="Yardım" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
                         <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Yardım</span>
                     </a>
                     <a href="/sss.html" class="topbar-icon-link d-inline-flex flex-column align-items-center text-decoration-none">
-                        <img src="img/icon-sss.png" alt="Sıkça Sorulan Sorular" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
+                        <img decoding="async" src="img/icon-sss.png" alt="Sıkça Sorulan Sorular" class="topbar-icon-img" style="height: 34px; width: auto; object-fit: contain; transition: transform 0.2s;">
                         <span class="topbar-icon-text font-weight-bold text-dark mt-1" style="font-size: 11px; line-height: 1.2;">Sıkça Sorulan Sorular</span>
                     </a>
                 </div>
@@ -82,7 +134,7 @@
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="/index.html" class="text-decoration-none d-inline-flex align-items-center">
-                    <img src="img/logo.png" alt="MultiShop" style="height: 48px; width: auto; object-fit: contain;">
+                    <img decoding="async" src="img/logo.png" alt="MultiShop" style="height: 48px; width: auto; object-fit: contain;">
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
@@ -142,7 +194,7 @@
                 <div class="col-lg-9">
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                         <a href="/index.html" class="text-decoration-none d-block d-lg-none">
-                            <img src="img/logo.png" alt="MultiShop" style="height: 40px; width: auto; object-fit: contain;">
+                            <img decoding="async" src="img/logo.png" alt="MultiShop" style="height: 40px; width: auto; object-fit: contain;">
                         </a>
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
@@ -150,23 +202,23 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
                                 <a href="/index.html" class="nav-item nav-link main-nav-link active">
-                                    <img src="img/nav-home.png" alt="Anasayfa" class="nav-icon">
+                                    <img decoding="async" src="img/nav-home.png" alt="Anasayfa" class="nav-icon">
                                     <span>Anasayfa</span>
                                 </a>
                                 <a href="/shop.html" class="nav-item nav-link main-nav-link">
-                                    <img src="img/nav-shop.png" alt="Mağaza & Katalog" class="nav-icon">
+                                    <img decoding="async" src="img/nav-shop.png" alt="Mağaza & Katalog" class="nav-icon">
                                     <span>Mağaza & Katalog</span>
                                 </a>
                                 <a href="/cart.html" class="nav-item nav-link main-nav-link">
-                                    <img src="img/nav-cart.png" alt="Sepetim" class="nav-icon">
+                                    <img decoding="async" src="img/nav-cart.png" alt="Sepetim" class="nav-icon">
                                     <span>Sepetim</span>
                                 </a>
                                 <a href="/checkout.html" class="nav-item nav-link main-nav-link">
-                                    <img src="img/nav-checkout.png" alt="Ödeme (Sandbox)" class="nav-icon">
+                                    <img decoding="async" src="img/nav-checkout.png" alt="Ödeme (Sandbox)" class="nav-icon">
                                     <span>Ödeme (Sandbox)</span>
                                 </a>
                                 <a href="/contact.html" class="nav-item nav-link main-nav-link">
-                                    <img src="img/nav-contact.png" alt="İletişim" class="nav-icon">
+                                    <img decoding="async" src="img/nav-contact.png" alt="İletişim" class="nav-icon">
                                     <span>İletişim</span>
                                 </a>
                             </div>
@@ -198,7 +250,7 @@
                     <div class="carousel-inner">
                         <!-- Slide 1: Erkek Modası -->
                         <div class="carousel-item position-relative active" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/carousel-1.jpg" alt="Erkek Modası" style="object-fit: cover;">
+                            <img decoding="async" class="position-absolute w-100 h-100" src="img/carousel-1.jpg" alt="Erkek Modası" style="object-fit: cover;">
                             <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3 text-center" style="max-width: 720px;">
                                     <span class="hero-tag">YENİ SEZON KOLEKSİYONU 2026</span>
@@ -218,11 +270,11 @@
 
                         <!-- Slide 2: Kadın Modası -->
                         <div class="carousel-item position-relative" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/carousel-2.jpg" alt="Kadın Modası" style="object-fit: cover;">
+                            <img decoding="async" class="position-absolute w-100 h-100" src="img/carousel-2.jpg" alt="Kadın Modası" style="object-fit: cover;">
                             <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3 text-center" style="max-width: 720px;">
                                     <span class="hero-tag">KADIN MODASI & ZARAFET</span>
-                                    <h1 class="hero-title">Zarafetin En Doğal Hali.</h1>
+                                    <div class="hero-title h2 font-weight-bold">Zarafetin En Doğal Hali.</div>
                                     <p class="hero-desc mx-auto">Uçuşan şifon elbiseler, dökümlü trikolar ve bohem dantel dokunuşlarla gardırobunuza değer katın.</p>
                                     <div class="d-flex align-items-center justify-content-center flex-wrap">
                                         <a class="btn-hero-primary mb-2" href="/shop.html?category=elbiseler&search=kadin">
@@ -238,11 +290,11 @@
 
                         <!-- Slide 3: Çocuk & Bebek Modası -->
                         <div class="carousel-item position-relative" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="img/carousel-3.jpg" alt="Çocuk ve Bebek Modası" style="object-fit: cover;">
+                            <img decoding="async" class="position-absolute w-100 h-100" src="img/carousel-3.jpg" alt="Çocuk ve Bebek Modası" style="object-fit: cover;">
                             <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3 text-center" style="max-width: 720px;">
                                     <span class="hero-tag">BEBEK & ÇOCUK DÜNYASI</span>
-                                    <h1 class="hero-title">Küçük Adımlara Büyük Neşe.</h1>
+                                    <div class="hero-title h2 font-weight-bold">Küçük Adımlara Büyük Neşe.</div>
                                     <p class="hero-desc mx-auto">%100 organik pamuk kumaşlar, antialerjik bambu tulumlar ve masalsı prenses elbiseleri minikleri bekliyor.</p>
                                     <div class="d-flex align-items-center justify-content-center flex-wrap">
                                         <a class="btn-hero-primary mb-2" href="/shop.html?category=elbiseler&search=bebek">
@@ -262,7 +314,7 @@
             <!-- Sağ Kampanya Kutuları -->
             <div class="col-lg-4">
                 <div class="product-offer mb-30" style="height: 200px; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                    <img class="img-fluid" src="img/offer-1.jpg" alt="Öğrenci Kampanyası" style="filter: brightness(0.72);">
+                    <img decoding="async" class="img-fluid" src="img/offer-1.jpg" alt="Öğrenci Kampanyası" style="filter: brightness(0.72);">
                     <div class="offer-text text-center p-3">
                         <h6 class="text-white text-uppercase" style="letter-spacing: 1.5px; font-size: 11px;">Öğrenci Kampanyası</h6>
                         <h3 class="text-white mb-2 font-weight-bold" style="font-family: var(--font-serif);">%20 Özel İndirim</h3>
@@ -273,7 +325,7 @@
                     </div>
                 </div>
                 <div class="product-offer mb-30" style="height: 200px; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
-                    <img class="img-fluid" src="img/offer-2.jpg" alt="Ücretsiz Kargo" style="filter: brightness(0.72);">
+                    <img decoding="async" class="img-fluid" src="img/offer-2.jpg" alt="Ücretsiz Kargo" style="filter: brightness(0.72);">
                     <div class="offer-text text-center p-3">
                         <h6 class="text-white text-uppercase" style="letter-spacing: 1.5px; font-size: 11px;">Hızlı Teslimat</h6>
                         <h3 class="text-white mb-2 font-weight-bold" style="font-family: var(--font-serif);">500 TL Üzeri Bedava</h3>
@@ -350,7 +402,7 @@
             <!-- 1. Erkek Koleksiyonu -->
             <div class="col-lg-4 col-md-6">
                 <div class="fashion-story-card">
-                    <img src="img/prod-suit-1.jpg" alt="Erkek Koleksiyonu">
+                    <img decoding="async" src="img/prod-suit-1.jpg" alt="Erkek Koleksiyonu">
                     <div class="fashion-story-overlay">
                         <span class="fashion-story-badge">Erkek Modası</span>
                         <h3 class="fashion-story-title">İtalyan Zarafeti & Takım Elbise</h3>
@@ -365,7 +417,7 @@
             <!-- 2. Kadın Koleksiyonu -->
             <div class="col-lg-4 col-md-6">
                 <div class="fashion-story-card">
-                    <img src="img/prod-dress-1.jpg" alt="Kadın Koleksiyonu">
+                    <img decoding="async" src="img/prod-dress-1.jpg" alt="Kadın Koleksiyonu">
                     <div class="fashion-story-overlay">
                         <span class="fashion-story-badge">Kadın Modası</span>
                         <h3 class="fashion-story-title">Uçuşan Şifon & Çiçek Desenleri</h3>
@@ -380,7 +432,7 @@
             <!-- 3. Bebek & Çocuk Koleksiyonu -->
             <div class="col-lg-4 col-md-12">
                 <div class="fashion-story-card">
-                    <img src="img/prod-baby-1.jpg" alt="Bebek ve Çocuk Koleksiyonu">
+                    <img decoding="async" src="img/prod-baby-1.jpg" alt="Bebek ve Çocuk Koleksiyonu">
                     <div class="fashion-story-overlay">
                         <span class="fashion-story-badge">Bebek & Çocuk</span>
                         <h3 class="fashion-story-title">Organik Pamuk & Masal Prensesi</h3>
@@ -457,7 +509,7 @@
                 <a href="/shop.html?category=mayo" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-mayo.jpg" alt="Mayo & Bikini Karakalem Moda Çizimi">
+                            <img decoding="async" src="img/sketch-mayo.jpg" alt="Mayo & Bikini Karakalem Moda Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Mayo & Plaj Giyimi</span>
@@ -474,7 +526,7 @@
                 <a href="/shop.html?category=elbiseler" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-elbise.jpg" alt="Elbiseler Karakalem Moda Çizimi">
+                            <img decoding="async" src="img/sketch-elbise.jpg" alt="Elbiseler Karakalem Moda Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Kadın Elbiseleri</span>
@@ -491,7 +543,7 @@
                 <a href="/shop.html?category=ceketler" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-ceket.jpg" alt="Ceketler Karakalem Moda Çizimi">
+                            <img decoding="async" src="img/sketch-ceket.jpg" alt="Ceketler Karakalem Moda Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Ceketler & Takım</span>
@@ -508,7 +560,7 @@
                 <a href="/shop.html?category=ayakkabi" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-ayakkabi.jpg" alt="Ayakkabı Karakalem Moda Çizimi">
+                            <img decoding="async" src="img/sketch-ayakkabi.jpg" alt="Ayakkabı Karakalem Moda Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Ayakkabı Koleksiyonu</span>
@@ -525,7 +577,7 @@
                 <a href="/shop.html?category=kamera" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-kamera.jpg" alt="Vintage Analog Fotoğraf Ekipmanları Karakalem Çizimi">
+                            <img decoding="async" src="img/sketch-kamera.jpg" alt="Vintage Analog Fotoğraf Ekipmanları Karakalem Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Vintage Fotoğraf</span>
@@ -542,7 +594,7 @@
                 <a href="/shop.html?category=kozmetik" class="text-decoration-none">
                     <div class="sketch-card">
                         <div class="sketch-img-wrap">
-                            <img src="img/sketch-kozmetik.jpg" alt="Kozmetik ve Bakım Ürünleri Karakalem Çizimi">
+                            <img decoding="async" src="img/sketch-kozmetik.jpg" alt="Kozmetik ve Bakım Ürünleri Karakalem Çizimi">
                         </div>
                         <div class="sketch-card-body">
                             <span class="sketch-badge">Kozmetik ve Bakım</span>
@@ -575,7 +627,8 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="/index.html"><i class="fa fa-angle-right mr-2"></i>Anasayfa</a>
                             <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Mağazamız</a>
-                            <a class="text-secondary mb-2" href="/shop.html"><i class="fa fa-angle-right mr-2"></i>Ürün Detayı</a>
+                            <a class="text-secondary mb-2" href="/gizlilik.html"><i class="fa fa-angle-right mr-2"></i>Gizlilik Politikası</a>
+                            <a class="text-secondary mb-2" href="/kullanim-kosullari.html"><i class="fa fa-angle-right mr-2"></i>Kullanım Şartları</a>
                             <a class="text-secondary mb-2" href="/cart.html"><i class="fa fa-angle-right mr-2"></i>Alışveriş Sepeti</a>
                             <a class="text-secondary mb-2" href="/checkout.html"><i class="fa fa-angle-right mr-2"></i>Ödeme Yap</a>
                             <a class="text-secondary" href="/contact.html"><i class="fa fa-angle-right mr-2"></i>İletişim</a>
@@ -595,11 +648,11 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Bülten</h5>
                         <p>En yeni kampanyalardan ve indirimlerden haberdar olmak için bültenimize abone olun.</p>
-                        <form action="" onsubmit="event.preventDefault(); alert('Bültene başarıyla abone oldunuz!');">
+                        <form class="newsletter-form" action="/api/newsletter" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required>
+                                <input type="email" class="form-control" placeholder="E-posta Adresiniz" required aria-label="E-posta Adresiniz">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+                                    <button class="btn btn-primary font-weight-bold px-3" type="submit">Abone Ol</button>
                                 </div>
                             </div>
                         </form>
@@ -617,11 +670,11 @@
         <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary font-weight-bold" href="/index.html">MultiShop</a>. Tüm Hakları Saklıdır.
+                    &copy; <a class="text-primary font-weight-bold" href="/index.html">MultiShop</a>. Tüm Hakları Saklıdır. | <a href="javascript:void(0)" onclick="openCookieConsent()" class="text-secondary text-decoration-underline ml-1">Çerez Tercihleri</a>
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="Ödeme Yöntemleri">
+                <img decoding="async" class="img-fluid" src="img/payments.png" alt="Ödeme Yöntemleri">
             </div>
         </div>
     </div>
@@ -642,6 +695,8 @@
     <script src="js/main.js"></script>
     <script src="js/app-common.js"></script>
     <script src="js/app-home.js"></script>
+    <script src="js/cookie-consent.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 
 </html>

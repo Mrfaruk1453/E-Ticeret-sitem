@@ -1,0 +1,75 @@
+# MultiShop İleri Düzey Dokümantasyonu (llms-full.txt)
+> Yapay Zeka Ajanları (AI Agents), LLM Arama Motorları ve Otomasyon Botları için Kapsamlı Teknik ve İşletim Rehberi
+
+## 1. Platform Özeti ve Mimari
+- **Sistem Adı:** MultiShop Lüks E-Ticaret Platformu
+- **Backend Altyapısı:** Node.js (v26+), Express.js, native `node:sqlite` (DatabaseSync, WAL Modu)
+- **Frontend Altyapısı:** Vanilla JS, Bootstrap 4, FontAwesome 5, Responsive Design
+- **Para Birimi & Finansal Model:** Kuruş (Cents) integer storage. Tüm parasal hesaplamalar sunucu tarafında yapılır (`Math.round` kayan nokta sapmalarına karşı korumalıdır).
+- **Eşzamanlılık (Concurrency) Güvenliği:** SQLite `BEGIN IMMEDIATE` ACID transaction ile ödeme anında stok yarışı (race condition) engellenir. Son kalan 1 stok için aynı anda gelen siparişlerden yalnızca ilki onaylanır, diğeri HTTP 409 alır.
+
+## 2. Sipariş Durum Makinesi (State Machine - Şekil 02.1)
+Platform 9 durumlu, 10 izinli geçişe sahip sonlu durum makinesi (Finite State Machine) ile yönetilir:
+1. `SEPET`: Müşterinin ürünleri eklediği oturum durumu.
+2. `ODEME_BEKLIYOR`: Müşterinin checkout formunu doldurup ödeme adımına geçtiği an.
+3. `ODENDI`: 3D Secure / Sanal Pos onayının alındığı, **stokların atomik olarak düştüğü** durum.
+4. `HAZIRLANIYOR`: Depo görevlilerinin siparişi paketlediği durum.
+5. `KARGOLANDI`: Kargo takip numarası ile teslimat firmasına verilen durum.
+6. `TESLIM_EDILDI`: Müşteriye teslim edilen nihai başarılı durum.
+7. `ODEME_BASARISIZ`: Yetersiz bakiye veya hatalı CVV sonucu ödemenin reddedildiği durum (Stok düşmez).
+8. `IPTAL`: Siparişin iptal edildiği durum (**Stoklar veritabanına otomatik olarak iade edilir**).
+9. `IADE`: Müşterinin 14 gün içinde ürünü geri gönderip parasını aldığı durum (**Stoklar iade edilir**).
+
+## 3. REST API Uç Noktaları Spesifikasyonu
+
+### A. Ürün Kataloğu
+- `GET /api/products`
+  - Yanıt: `{ success: true, total: 32, page: 1, totalPages: 3, products: [...] }`
+  - Ürün Nesnesi Alanları: `id`, `name`, `title`, `slug`, `category_slug`, `brand`, `basePriceFormatted`, `priceFormatted`, `image`, `images`, `rating`, `total_stock`, `inStock`
+- `GET /api/products/:slugOrId`
+  - Yanıt: `{ success: true, product: { ..., variants: [...], relatedProducts: [...] } }`
+  - Varyant Alanları: `id`, `sku`, `color`, `size_or_storage`, `stock`, `priceFormatted`, `inStock`
+- `GET /api/categories`
+  - Yanıt: `[ { id: 1, name: "Kadın Elbiseleri", slug: "kadin-elbise", product_count: 8 }, ... ]`
+
+### B. Sepet İşlemleri
+- `GET /api/cart`
+  - Session cookie (`session_token`) ile eşleşen sepeti getirir.
+- `POST /api/cart/items`
+  - Body: `{ variantId: 101, quantity: 1 }`
+- `PUT /api/cart/items/:itemId`
+  - Body: `{ quantity: 2 }`
+- `DELETE /api/cart/items/:itemId`
+- `POST /api/cart/coupon`
+  - Body: `{ code: "OGRENCI20" }` (Öğrencilere %20 indirim sağlar) veya `{ code: "BAHAR100" }` (100 TL indirim)
+
+### C. Ödeme ve Sipariş Oluşturma
+- `POST /api/checkout`
+  - Body:
+    ```json
+    {
+      "customer": {
+        "name": "Faruk Demir",
+        "email": "faruk@example.com",
+        "phone": "05551234567",
+        "city": "Osmaniye",
+        "district": "Merkez",
+        "address": "OKÜ Kampüsü Bilgisayar Programcılığı Binası"
+      },
+      "card": {
+        "cardNumber": "4532015012345678",
+        "cardHolder": "FARUK DEMIR",
+        "expiry": "12/28",
+        "cvv": "123"
+      }
+    }
+    ```
+  - Sandbox Test Kartları:
+    - `4532 0150 1234 5678` -> Başarılı onay (HTTP 201)
+    - `4000 0000 0000 0002` -> Yetersiz Bakiye (HTTP 402)
+    - `4111 1111 1111 1113` -> Hatalı CVV (HTTP 402)
+
+## 4. İletişim & Haklar
+- **Üniversite & Proje:** Osmaniye Korkut Ata Üniversitesi (OKÜ) Bilgisayar Programcılığı E-Ticaret Dersi
+- **Geliştirici:** Faruk Demir
+- **Telif Hakları:** MultiShop © 2026. Tüm hakları saklıdır.

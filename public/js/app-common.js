@@ -372,6 +372,44 @@ async function quickAddToCart(variantId, productName = 'Ürün') {
 /* ==========================================================================
    Scroll Reveal & Sticky Header Gözlemcisi
    ========================================================================== */
+
+// Gerçek Bülten Kayıt Fonksiyonu (AJAX ile /api/newsletter endpointine bağlanır)
+async function handleNewsletterSubmit(e, form) {
+  e.preventDefault();
+  const input = form.querySelector('input[type="email"]');
+  const btn = form.querySelector('button[type="submit"]');
+  if (!input || !input.value) return;
+
+  const email = input.value.trim();
+  const origHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Kaydediliyor...';
+  }
+
+  try {
+    const res = await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      input.value = '';
+    } else {
+      showToast(data.error || 'Abonelik işlemi tamamlanamadı.', 'danger');
+    }
+  } catch (err) {
+    showToast('Bağlantı hatası oluştu, lütfen tekrar deneyin.', 'danger');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origHtml;
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   updateNavCartBadge();
   ensureCartDrawerElements();
@@ -413,6 +451,17 @@ document.addEventListener('DOMContentLoaded', () => {
         openCartDrawer();
       }
     });
+  });
+
+
+  // Bülten Formlarını Gerçek API'ye Bağla (Sahte alertler yerine)
+  document.querySelectorAll('form.newsletter-form, .newsletter-form-container form, form').forEach(form => {
+    const emailInput = form.querySelector('input[type="email"]');
+    if (emailInput && !form.getAttribute('action')?.startsWith('/api/checkout') && !form.getAttribute('action')?.startsWith('/api/cart')) {
+      form.removeAttribute('onsubmit');
+      form.classList.add('newsletter-form');
+      form.addEventListener('submit', (e) => handleNewsletterSubmit(e, form));
+    }
   });
 
   // Arama formu
