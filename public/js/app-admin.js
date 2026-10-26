@@ -325,10 +325,25 @@ async function executeTransition(orderId, toStatus, meta = {}) {
     const data = await res.json();
     if (data.success) {
       try {
+        const ordNum = (data.order && data.order.order_number) || '';
         localStorage.setItem('admin_order_status_' + orderId, toStatus);
+        if (ordNum) {
+          localStorage.setItem('order_status_' + ordNum, toStatus);
+        }
         if (meta.tracking_number) {
           localStorage.setItem('admin_order_tracking_' + orderId, meta.tracking_number);
+          if (ordNum) {
+            localStorage.setItem('order_tracking_' + ordNum, meta.tracking_number);
+          }
         }
+        // Broadcast storage change across open browser tabs
+        localStorage.setItem('order_status_sync', JSON.stringify({
+          orderId,
+          orderNumber: ordNum,
+          status: toStatus,
+          trackingNumber: meta.tracking_number || (data.order && data.order.tracking_number),
+          timestamp: Date.now()
+        }));
       } catch (e) {}
       showToast(data.message, 'success');
       loadAdminOrders();

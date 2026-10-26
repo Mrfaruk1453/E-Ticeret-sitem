@@ -157,13 +157,16 @@
             <div class="col-lg-10">
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body p-4 text-center bg-light" style="border-radius: 8px;">
-                        <div class="mb-3">
-                            <i class="fa fa-check-circle text-success" style="font-size: 64px;"></i>
+                        <div class="mb-3" id="order-icon-wrapper">
+                            <i class="fa fa-check-circle text-success" style="font-size: 64px;" id="order-status-icon"></i>
                         </div>
-                        <h2 class="font-weight-bold text-dark">Siparişiniz Başarıyla Alındı!</h2>
-                        <p class="text-muted">Ödemeniz onaylandı ve siparişiniz hazırlık sürecine alındı.</p>
-                        <div class="badge badge-primary px-3 py-2 font-weight-bold" style="font-size: 16px;" id="display-order-number">
-                            Sipariş No: Yükleniyor...
+                        <h2 class="font-weight-bold text-dark" id="order-status-title">Siparişiniz Başarıyla Alındı!</h2>
+                        <p class="text-muted" id="order-status-desc">Ödemeniz onaylandı ve siparişiniz hazırlık sürecine alındı.</p>
+                        <div class="d-flex justify-content-center align-items-center flex-wrap">
+                            <div class="badge badge-primary px-3 py-2 font-weight-bold mr-2 mb-2" style="font-size: 16px;" id="display-order-number">
+                                Sipariş No: Yükleniyor...
+                            </div>
+                            <div id="order-status-badge-container" class="mb-2"></div>
                         </div>
                     </div>
                 </div>

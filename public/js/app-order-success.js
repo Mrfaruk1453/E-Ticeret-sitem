@@ -13,27 +13,100 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 1. Önce sessionStorage'dan anlık olarak yükle (Serverless soğuk başlangıç ve örnek ayrışmalarına karşı sıfır gecikme)
+  /**
+ * MultiShop Sipariş Takip & Onay Scripti
+ * Gerçek Zamanlı Durum Akışı, Dinamik Başlıklar ve Çoklu Sekme Eşitlemesi
+ */
+
+let currentOrderData = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const orderNumber = params.get('order');
+
+  if (!orderNumber) {
+    window.location.href = '/shop.html';
+    return;
+  }
+
+  // 1. Önce yerel hafızadan ve önbellekten sipariş verisini çek
   let cachedOrder = null;
   try {
     const raw = sessionStorage.getItem('latest_order_' + orderNumber) || sessionStorage.getItem('latest_order_current');
     if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && (parsed.order_number === orderNumber || !parsed.order_number)) {
-        cachedOrder = parsed;
-        renderOrderUI(cachedOrder);
-      }
+      cachedOrder = JSON.parse(raw);
     }
-  } catch (e) {
-    console.warn('SessionStorage sipariş okuma hatası:', e);
+  } catch (e) {}
+
+  // Yerel depodaki güncel durumu kontrol et
+  applyLocalStatusOverride(orderNumber, cachedOrder);
+
+  if (cachedOrder) {
+    currentOrderData = cachedOrder;
+    renderOrderUI(cachedOrder);
   }
 
-  // 2. Sunucudan en güncel durumu sorgula (yeniden deneme ile)
+  // 2. Sunucudan en güncel durumu sorgula
   await loadOrderDetails(orderNumber, cachedOrder);
+
+  // 3. Çoklu sekme eşitlemesi (Admin panelinde kargolandı yapıldığında anında bu sekmeye yansır)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'order_status_sync' || e.key === 'order_status_' + orderNumber) {
+      handleStorageStatusSync(orderNumber);
+    }
+  });
+
+  // 4. Düzenli aralıklarla sunucu durumunu kontrol et (5 saniyede bir)
+  setInterval(() => {
+    loadOrderDetails(orderNumber, currentOrderData, true);
+  }, 5000);
 });
+
+function applyLocalStatusOverride(orderNumber, order) {
+  if (!order) return;
+  const localStatus = localStorage.getItem('order_status_' + orderNumber) || 
+                      (order.id ? localStorage.getItem('admin_order_status_' + order.id) : null);
+  const localTracking = localStorage.getItem('order_tracking_' + orderNumber) || 
+                        (order.id ? localStorage.getItem('admin_order_tracking_' + order.id) : null);
+  
+  if (localStatus) order.status = localStatus;
+  if (localTracking) order.tracking_number = localTracking;
+}
+
+function handleStorageStatusSync(orderNumber) {
+  try {
+    const syncRaw = localStorage.getItem('order_status_sync');
+    if (syncRaw) {
+      const syncData = JSON.parse(syncRaw);
+      if (syncData.orderNumber === orderNumber || (currentOrderData && syncData.orderId == currentOrderData.id)) {
+        if (!currentOrderData) currentOrderData = {};
+        currentOrderData.status = syncData.status;
+        if (syncData.trackingNumber) currentOrderData.tracking_number = syncData.trackingNumber;
+        renderOrderUI(currentOrderData);
+        return;
+      }
+    }
+
+    const localStatus = localStorage.getItem('order_status_' + orderNumber);
+    const localTracking = localStorage.getItem('order_tracking_' + orderNumber);
+    if (localStatus && currentOrderData) {
+      currentOrderData.status = localStatus;
+      if (localTracking) currentOrderData.tracking_number = localTracking;
+      renderOrderUI(currentOrderData);
+    }
+  } catch (e) {}
+}
 
 function renderOrderUI(o) {
   if (!o) return;
+  currentOrderData = o;
+  const status = o.status || 'ODENDI';
+  const trackingNumber = o.tracking_number || null;
 
+  // 1. Dinamik Hero Durum Kartı (Başlık, Açıklama, İkon ve Rozet)
+  updateHeroStatus(status, trackingNumber);
+
+  // 2. Sipariş Numarası ve Bilgiler
   const displayEl = document.getElementById('display-order-number');
   if (displayEl) {
     displayEl.textContent = `Sipariş No: ${o.order_number || '-'}`;
@@ -52,7 +125,9 @@ function renderOrderUI(o) {
   if (addrEl) addrEl.textContent = `${o.shipping_address || ''}, ${o.shipping_city || ''}`;
 
   const trackEl = document.getElementById('info-tracking');
-  if (trackEl) trackEl.textContent = o.tracking_number || 'Henüz Kargo Takip Numarası Girilmedi';
+  if (trackEl) {
+    trackEl.textContent = trackingNumber || 'Henüz Kargo Takip Numarası Girilmedi';
+  }
 
   const subtotalEl = document.getElementById('summary-subtotal');
   if (subtotalEl && o.subtotal_cents !== undefined) {
@@ -76,7 +151,7 @@ function renderOrderUI(o) {
     if (discVal) discVal.textContent = `-${formatMoney(o.discount_cents)}`;
   }
 
-  // Ürün listesini oluştur
+  // 3. Ürün Listesi
   const tbody = document.getElementById('order-items-tbody');
   if (tbody && o.items && o.items.length > 0) {
     tbody.innerHTML = o.items.map(it => `
@@ -92,21 +167,76 @@ function renderOrderUI(o) {
     `).join('');
   }
 
-  // Durum çubuğunu güncelle
-  updateProgressStepper(o.status || 'ODENDI', o.tracking_number);
+  // 4. Durum Makinesi İlerleme Çubuğu (Stepper)
+  updateProgressStepper(status, trackingNumber);
 }
 
-async function loadOrderDetails(orderNumber, fallbackOrder = null) {
+function updateHeroStatus(status, trackingNumber) {
+  const iconWrapper = document.getElementById('order-icon-wrapper');
+  const titleEl = document.getElementById('order-status-title');
+  const descEl = document.getElementById('order-status-desc');
+  const badgeContainer = document.getElementById('order-status-badge-container');
+
+  const configs = {
+    'ODENDI': {
+      icon: '<i class="fa fa-check-circle text-success" style="font-size: 64px;"></i>',
+      title: 'Siparişiniz Başarıyla Alındı!',
+      desc: 'Ödemeniz onaylandı ve siparişiniz hazırlık sürecine alındı.',
+      badge: '<span class="badge badge-success px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-check mr-1"></i> ÖDENDİ (HAZIRLIKTA)</span>'
+    },
+    'HAZIRLANIYOR': {
+      icon: '<i class="fa fa-box-open text-warning" style="font-size: 64px;"></i>',
+      title: 'Siparişiniz Hazırlanıyor!',
+      desc: 'Ürünleriniz depomuzda özenle kontrol ediliyor ve paketleniyor.',
+      badge: '<span class="badge badge-warning text-dark px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-cog fa-spin mr-1"></i> HAZIRLANIYOR</span>'
+    },
+    'KARGOLANDI': {
+      icon: '<i class="fa fa-shipping-fast text-primary" style="font-size: 64px;"></i>',
+      title: 'Siparişiniz Kargoya Verildi! 🚚',
+      desc: trackingNumber 
+        ? `Paketiniz kargo firmasına teslim edilmiştir. Kargo Takip Numarası: <strong>${trackingNumber}</strong>`
+        : 'Paketiniz kargo firmasına teslim edilmiştir.',
+      badge: '<span class="badge badge-primary px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-truck mr-1"></i> KARGOLANDI</span>'
+    },
+    'TESLIM_EDILDI': {
+      icon: '<i class="fa fa-check-double text-success" style="font-size: 64px;"></i>',
+      title: 'Siparişiniz Teslim Edildi! 🏠',
+      desc: 'Paketiniz teslim edilmiştir. 14 günlük yasal cayma ve iade hakkınız başlamıştır.',
+      badge: '<span class="badge badge-dark px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-home mr-1"></i> TESLİM EDİLDİ</span>'
+    },
+    'IPTAL': {
+      icon: '<i class="fa fa-times-circle text-danger" style="font-size: 64px;"></i>',
+      title: 'Sipariş İptal Edildi 🚫',
+      desc: 'Bu sipariş iptal edilmiştir. Stoklar mağazamıza iade edilmiştir.',
+      badge: '<span class="badge badge-danger px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-ban mr-1"></i> İPTAL EDİLDİ</span>'
+    },
+    'IADE': {
+      icon: '<i class="fa fa-undo text-warning" style="font-size: 64px;"></i>',
+      title: 'Sipariş İade Alındı ↩',
+      desc: 'Sipariş iade süreciniz tamamlanmış, ücret iadeniz başlatılmıştır.',
+      badge: '<span class="badge badge-warning text-dark px-3 py-2 font-weight-bold" style="font-size: 14px;"><i class="fa fa-undo mr-1"></i> İADE ALINDI</span>'
+    }
+  };
+
+  const c = configs[status] || configs['ODENDI'];
+  if (iconWrapper) iconWrapper.innerHTML = c.icon;
+  if (titleEl) titleEl.textContent = c.title;
+  if (descEl) descEl.innerHTML = c.desc;
+  if (badgeContainer) badgeContainer.innerHTML = c.badge;
+}
+
+async function loadOrderDetails(orderNumber, fallbackOrder = null, isSilent = false) {
   let attempts = 0;
-  const maxAttempts = 3;
+  const maxAttempts = isSilent ? 1 : 3;
 
   while (attempts < maxAttempts) {
     attempts++;
     try {
-      const res = await fetch(`/api/orders/${orderNumber}`);
+      const res = await fetch(`/api/orders/${orderNumber}?t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.order) {
+          applyLocalStatusOverride(orderNumber, data.order);
           renderOrderUI(data.order);
           try {
             sessionStorage.setItem('latest_order_' + orderNumber, JSON.stringify(data.order));
@@ -115,32 +245,18 @@ async function loadOrderDetails(orderNumber, fallbackOrder = null) {
         }
       }
     } catch (err) {
-      console.warn(`Sipariş sorgusu ${attempts}. deneme başarısız:`, err);
+      if (!isSilent) console.warn(`Sipariş sorgusu ${attempts}. deneme:`, err);
     }
 
     if (attempts < maxAttempts) {
-      await new Promise(r => setTimeout(r, 800));
+      await new Promise(r => setTimeout(r, 600));
     }
   }
 
-  // Eğer sunucu örneği henüz eşitlenmediyse ama elimizde fallback sipariş varsa sessizce UI'ı koru
-  if (fallbackOrder) {
-    return;
-  }
+  if (fallbackOrder) return;
 
-  // Her ikisi de yoksa bilgilendirici hata göster
   const displayEl = document.getElementById('display-order-number');
-  if (displayEl) {
-    displayEl.textContent = `Sipariş: ${orderNumber} (İşleniyor)`;
-  }
-  const alertBox = document.getElementById('status-alert-box');
-  if (alertBox) {
-    alertBox.innerHTML = `
-      <div class="alert alert-info mb-0">
-        <i class="fa fa-info-circle mr-2"></i> Siparişiniz güvenle alındı ve sisteme kaydedildi. Detaylar yüklenemiyorsa sayfayı yenileyebilir veya destek için bizimle iletişime geçebilirsiniz.
-      </div>
-    `;
-  }
+  if (displayEl) displayEl.textContent = `Sipariş: ${orderNumber}`;
 }
 
 function updateProgressStepper(status, trackingNumber) {
@@ -197,8 +313,8 @@ function updateProgressStepper(status, trackingNumber) {
   if (status === 'KARGOLANDI' && trackingNumber) {
     if (alertBox) {
       alertBox.innerHTML = `
-        <div class="alert alert-success mb-0">
-          <i class="fa fa-truck mr-2"></i> Siparişiniz kargoya verilmiştir! Takip Numarası: <strong>${trackingNumber}</strong>
+        <div class="alert alert-success mb-0 font-weight-bold">
+          <i class="fa fa-truck mr-2"></i> Siparişiniz kargoya verilmiştir! Kargo Takip Numarası: <strong>${trackingNumber}</strong>
         </div>
       `;
     }
@@ -207,6 +323,22 @@ function updateProgressStepper(status, trackingNumber) {
       alertBox.innerHTML = `
         <div class="alert alert-success mb-0 font-weight-bold">
           <i class="fa fa-check-double mr-2"></i> Sipariş teslim edilmiştir. 14 günlük yasal iade penceresi başlamıştır.
+        </div>
+      `;
+    }
+  } else if (status === 'HAZIRLANIYOR') {
+    if (alertBox) {
+      alertBox.innerHTML = `
+        <div class="alert alert-warning text-dark mb-0 font-weight-bold">
+          <i class="fa fa-box mr-2"></i> Siparişiniz depomuzda hazırlanıyor ve kargolanmak üzere paketleniyor.
+        </div>
+      `;
+    }
+  } else {
+    if (alertBox) {
+      alertBox.innerHTML = `
+        <div class="alert alert-success mb-0">
+          <i class="fa fa-check mr-2"></i> Ödemeniz onaylandı. Siparişiniz hazırlanma sırasına alındı.
         </div>
       `;
     }
