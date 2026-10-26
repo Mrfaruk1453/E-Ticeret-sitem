@@ -27,7 +27,7 @@
     banner.setAttribute('role', 'region');
     banner.setAttribute('aria-label', 'Çerez ve Gizlilik Bildirimi');
 
-    // Inline modern MultiShop styling
+    // Inline modern MultiShop styling (Composited & Zero-CLS)
     banner.style.cssText = `
       position: fixed;
       bottom: 0;
@@ -40,7 +40,8 @@
       z-index: 999999;
       border-top: 4px solid #FFD333;
       font-family: 'Roboto', 'Inter', sans-serif;
-      animation: msSlideUp 0.35s ease-out;
+      transition: opacity 0.3s ease;
+      opacity: 1;
     `;
 
     banner.innerHTML = `
@@ -107,10 +108,10 @@
     renderConsentBanner();
   };
 
-  // DOM hazır olduğunda çalıştır
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCookieConsent);
+  // Sayfa ilk render ve FCP/CLS ölçümlerini tamamladıktan sonra göster (CLS & Reflow Önleme)
+  if (document.readyState === 'complete') {
+    setTimeout(initCookieConsent, 1200);
   } else {
-    initCookieConsent();
+    window.addEventListener('load', () => setTimeout(initCookieConsent, 1200));
   }
 })();

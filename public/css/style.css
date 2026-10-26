@@ -10263,8 +10263,9 @@ body {
 }
 .product-price-old {
   font-size: 13px;
-  color: #9CA3AF;
+  color: #4B5563;
   text-decoration: line-through;
+  font-weight: 500;
 }
 .product-colors-pill {
   font-size: 11px;
@@ -10544,14 +10545,14 @@ body {
 
 /* Skeleton Shimmer Loading */
 .skeleton-box {
-  background: linear-gradient(90deg, #F0EFE9 25%, #F8F7F4 50%, #F0EFE9 75%);
-  background-size: 200% 100%;
-  animation: skeletonShimmer 1.5s infinite;
+  background: #E5E7EB;
+  animation: skeletonPulse 1.4s ease-in-out infinite;
   border-radius: 4px;
+  will-change: opacity;
 }
-@keyframes skeletonShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.95; }
 }
 .skeleton-card {
   background: #FFFFFF;
@@ -10824,3 +10825,7 @@ textarea:focus-visible {
 .text-muted {
   color: #555555 !important;
 }
+
+
+#header-carousel { min-height: 430px; }
+@media (max-width: 768px) { #header-carousel { min-height: 360px; } }
