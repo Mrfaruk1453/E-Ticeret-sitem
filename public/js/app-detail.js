@@ -175,11 +175,10 @@ function renderProductDetail(p) {
       mainImg.src = p.image;
       mainImg.alt = p.name;
       const showImage = () => {
-        if (imgLoader) imgLoader.style.display = 'none';
-        mainImg.style.display = 'block';
-        requestAnimationFrame(() => {
-          mainImg.style.opacity = '1';
-        });
+        if (imgLoader) {
+          imgLoader.remove();
+        }
+        mainImg.style.opacity = '1';
       };
       if (mainImg.complete && mainImg.naturalWidth > 0) {
         showImage();
