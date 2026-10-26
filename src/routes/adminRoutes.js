@@ -131,7 +131,7 @@ router.post('/orders/sync', (req, res) => {
     if (Array.isArray(orders)) {
       for (const order of orders) {
         if (!order || !order.order_number) continue;
-        const existing = db.prepare('SELECT id FROM orders WHERE order_number = ?').get(order.order_number);
+        const existing = db.prepare('SELECT id, status FROM orders WHERE order_number = ?').get(order.order_number);
         if (!existing) {
           const ins = db.prepare(`
             INSERT OR REPLACE INTO orders (
@@ -181,6 +181,32 @@ router.post('/orders/sync', (req, res) => {
                   it.total_cents || (it.price_cents * (it.quantity || 1)) || 0
                 );
               } catch (e) {}
+            }
+          }
+
+          // Serverless instance inventory synchronization:
+          // If the newly synced order is in active purchased status, deduct stock on this container
+          if (['ODENDI', 'HAZIRLANIYOR', 'KARGOLANDI', 'TESLIM_EDILDI'].includes(order.status) && Array.isArray(order.items)) {
+            for (const it of order.items) {
+              const variantId = it.variant_id || it.id;
+              const qty = parseInt(it.quantity, 10) || 1;
+              if (variantId) {
+                db.prepare('UPDATE product_variants SET stock = MAX(0, stock - ?) WHERE id = ?').run(qty, variantId);
+              }
+            }
+          }
+        } else {
+          // If order exists, update status & tracking if changed
+          if (order.status && order.status !== existing.status) {
+            db.prepare('UPDATE orders SET status = ?, tracking_number = COALESCE(?, tracking_number), updated_at = CURRENT_TIMESTAMP WHERE id = ?')
+              .run(order.status, order.tracking_number || null, existing.id);
+
+            // If order was cancelled or returned, return stock
+            if ((order.status === 'IPTAL' || order.status === 'IADE') && existing.status !== 'IPTAL' && existing.status !== 'IADE') {
+              const items = db.prepare('SELECT variant_id, quantity FROM order_items WHERE order_id = ?').all(existing.id);
+              for (const it of items) {
+                db.prepare('UPDATE product_variants SET stock = stock + ? WHERE id = ?').run(it.quantity, it.variant_id);
+              }
             }
           }
         }

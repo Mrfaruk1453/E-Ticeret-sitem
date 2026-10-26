@@ -62,6 +62,17 @@ router.post('/sync', (req, res) => {
             );
           } catch (e) {}
         }
+
+        // Deduct stock if order is active
+        if (['ODENDI', 'HAZIRLANIYOR', 'KARGOLANDI', 'TESLIM_EDILDI'].includes(order.status)) {
+          for (const it of order.items) {
+            const variantId = it.variant_id || it.id;
+            const qty = parseInt(it.quantity, 10) || 1;
+            if (variantId) {
+              db.prepare('UPDATE product_variants SET stock = MAX(0, stock - ?) WHERE id = ?').run(qty, variantId);
+            }
+          }
+        }
       }
     }
 
