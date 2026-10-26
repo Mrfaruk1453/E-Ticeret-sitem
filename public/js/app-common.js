@@ -45,8 +45,9 @@ async function updateNavCartBadge() {
         b.textContent = newCount;
         if (newCount !== prevCount) {
           b.classList.remove('badge-bounce');
-          void b.offsetWidth; // trigger reflow
-          b.classList.add('badge-bounce');
+          requestAnimationFrame(() => {
+            b.classList.add('badge-bounce');
+          });
         }
       });
 

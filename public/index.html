@@ -10,8 +10,11 @@
     <link rel="canonical" href="https://e-ticeret-sitem.vercel.app/">
     <meta name="google-site-verification" content="PNcAgb-suGGjMU_taT6PKtDBSQ0BEbVJN_1wiACRc2A" />
 
-    <!-- Performance LCP Preload with high fetchpriority -->
-    <link rel="preload" as="image" href="img/carousel-1.jpg" fetchpriority="high">
+    <!-- Performance Responsive LCP Preload with high fetchpriority -->
+    <link rel="preload" as="image" href="img/carousel-1-mobile.webp" type="image/webp" media="(max-width: 576px)" fetchpriority="high">
+    <link rel="preload" as="image" href="img/carousel-1.webp" type="image/webp" media="(min-width: 577px)" fetchpriority="high">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Open Graph / Sosyal Medya Paylaşım Önizlemesi -->
     <meta property="og:type" content="website">
@@ -45,8 +48,12 @@
     <link href="lib/animate/animate.min.css" rel="stylesheet" media="print" onload="this.media='all'">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" media="print" onload="this.media='all'">
 
-    <!-- Minified Customized Bootstrap Stylesheet -->
-    <link href="css/style.min.css" rel="stylesheet">
+    <!-- Inline Critical CSS for Instant Above-the-Fold Render -->
+    <style>:root{--primary:#FFD333;--dark:#212529;--secondary:#F4F6F8;--font-sans:'Inter',system-ui,-apple-system,sans-serif;--font-serif:'Playfair Display',Georgia,serif}*,::after,::before{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;font-family:var(--font-sans);font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff}article,aside,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}a{color:#212529;text-decoration:none}img{vertical-align:middle;border-style:none}.container-fluid{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.col-12,.col-6,.col-lg-3,.col-lg-4,.col-lg-7,.col-lg-8,.col-lg-9,.col-md-12,.col-md-4,.col-md-6,.col-md-8,.col-sm-12,.col-sm-6,.col-xl-2{position:relative;width:100%;padding-right:15px;padding-left:15px}@media (min-width:992px){.col-lg-4{flex:0 0 33.333333%;max-width:33.333333%}.col-lg-8{flex:0 0 66.666667%;max-width:66.666667%}.col-lg-3{flex:0 0 25%;max-width:25%}.col-lg-9{flex:0 0 75%;max-width:75%}.d-lg-block{display:block!important}.d-lg-none{display:none!important}.d-lg-flex{display:flex!important}}.d-flex{display:flex!important}.d-none{display:none!important}.align-items-center{align-items:center!important}.justify-content-center{justify-content:center!important}.justify-content-between{justify-content:space-between!important}.text-center{text-align:center!important}.w-100{width:100%!important}.h-100{height:100%!important}.position-relative{position:relative!important}.position-absolute{position:absolute!important}.bg-primary{background-color:#FFD333!important}.bg-dark{background-color:#212529!important}.bg-light{background-color:#F8F9FA!important}.bg-secondary{background-color:#F4F6F8!important}.text-white{color:#fff!important}.text-dark{color:#212529!important}.text-muted{color:#555!important}.font-weight-bold{font-weight:700!important}.m-0{margin:0!important}.p-0{padding:0!important}.btn{display:inline-block;font-weight:700;text-align:center;vertical-align:middle;cursor:pointer;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;line-height:1.5;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.btn-primary{color:#171717!important;background-color:#FFD333;border-color:#FFD333}.announcement-bar{background:#1E2327;color:#E0E0E0;font-size:12px;padding:7px 16px;font-weight:500}.announcement-badge{background:#FFD333;color:#171717;font-weight:800;padding:2px 8px;border-radius:4px;font-size:10px;margin-right:8px}.carousel{position:relative}.carousel-inner{position:relative;width:100%;overflow:hidden}.carousel-item{position:relative;display:none;float:left;width:100%;margin-right:-100%;backface-visibility:hidden;transition:transform .6s ease-in-out}.carousel-item.active{display:block}.hero-editorial-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(15,23,42,.45) 0%,rgba(15,23,42,.75) 100%);z-index:2;padding:20px}.hero-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#FFD333;margin-bottom:8px}.hero-title{font-family:var(--font-serif);font-size:clamp(28px,5vw,54px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:12px}.hero-desc{font-size:clamp(14px,1.8vw,17px);color:rgba(255,255,255,.88);margin-bottom:24px;line-height:1.5}.btn-hero-primary{display:inline-flex;align-items:center;justify-content:center;background:#FFD333;color:#171717!important;font-weight:700;padding:12px 24px;border-radius:6px;font-size:14px;margin-right:12px;transition:transform .2s}.btn-hero-secondary{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#fff!important;font-weight:600;padding:12px 24px;border-radius:6px;border:1px solid rgba(255,255,255,.4);font-size:14px}@media (max-width:768px){.carousel-item{height:360px!important}.hero-title{font-size:26px!important}.hero-desc{font-size:13px!important}.btn-hero-primary,.btn-hero-secondary{padding:8px 16px!important;font-size:13px!important}}</style>
+
+    <!-- Minified Customized Bootstrap Stylesheet (Non-Render-Blocking) -->
+    <link href="css/style.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/style.min.css"></noscript>
 
     <!-- Schema.org JSON-LD Structured Data (Organization & WebSite) -->
     <script type="application/ld+json">
@@ -256,7 +263,11 @@
                         <div class="carousel-inner">
                             <!-- Slide 1: Erkek Modası (LCP High Priority Image) -->
                             <div class="carousel-item position-relative active" style="height: 430px;">
-                                <img fetchpriority="high" decoding="async" class="position-absolute w-100 h-100" src="img/carousel-1.jpg" alt="Erkek Modası ve Kruvaze Takım Elbise Koleksiyonu" width="1200" height="430" style="object-fit: cover;">
+                                <picture class="position-absolute w-100 h-100" style="top:0;left:0;">
+                                    <source media="(max-width: 576px)" srcset="img/carousel-1-mobile.webp" type="image/webp">
+                                    <source srcset="img/carousel-1.webp" type="image/webp">
+                                    <img fetchpriority="high" decoding="async" class="w-100 h-100" src="img/carousel-1.jpg" alt="Erkek Modası ve Kruvaze Takım Elbise Koleksiyonu" width="1200" height="430" style="object-fit: cover;">
+                                </picture>
                                 <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3 text-center" style="max-width: 720px;">
                                         <span class="hero-tag">YENİ SEZON KOLEKSİYONU 2026</span>
@@ -276,7 +287,11 @@
 
                             <!-- Slide 2: Kadın Modası -->
                             <div class="carousel-item position-relative" style="height: 430px;">
-                                <img loading="lazy" decoding="async" class="position-absolute w-100 h-100" src="img/carousel-2.jpg" alt="Kadın Modası Zarafet ve Şifon Elbiseler" width="1200" height="430" style="object-fit: cover;">
+                                <picture class="position-absolute w-100 h-100" style="top:0;left:0;">
+                                    <source media="(max-width: 576px)" srcset="img/carousel-2-mobile.webp" type="image/webp">
+                                    <source srcset="img/carousel-2.webp" type="image/webp">
+                                    <img loading="lazy" decoding="async" class="w-100 h-100" src="img/carousel-2.jpg" alt="Kadın Modası Zarafet ve Şifon Elbiseler" width="1200" height="430" style="object-fit: cover;">
+                                </picture>
                                 <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3 text-center" style="max-width: 720px;">
                                         <span class="hero-tag">KADIN MODASI & ZARAFET</span>
@@ -296,7 +311,11 @@
 
                             <!-- Slide 3: Çocuk & Bebek Modası -->
                             <div class="carousel-item position-relative" style="height: 430px;">
-                                <img loading="lazy" decoding="async" class="position-absolute w-100 h-100" src="img/carousel-3.jpg" alt="Çocuk ve Bebek Organik Pamuk Modası" width="1200" height="430" style="object-fit: cover;">
+                                <picture class="position-absolute w-100 h-100" style="top:0;left:0;">
+                                    <source media="(max-width: 576px)" srcset="img/carousel-3-mobile.webp" type="image/webp">
+                                    <source srcset="img/carousel-3.webp" type="image/webp">
+                                    <img loading="lazy" decoding="async" class="w-100 h-100" src="img/carousel-3.jpg" alt="Çocuk ve Bebek Organik Pamuk Modası" width="1200" height="430" style="object-fit: cover;">
+                                </picture>
                                 <div class="carousel-caption hero-editorial-overlay d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3 text-center" style="max-width: 720px;">
                                         <span class="hero-tag">BEBEK & ÇOCUK DÜNYASI</span>
@@ -679,7 +698,7 @@
         <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary font-weight-bold" href="/index.html">MultiShop</a>. Tüm Hakları Saklıdır. | <a href="javascript:void(0)" onclick="openCookieConsent()" class="text-secondary text-decoration-underline ml-1">Çerez Tercihleri</a>
+                    &copy; <a class="text-primary font-weight-bold" href="/index.html">MultiShop</a>. Tüm Hakları Saklıdır. | <a href="/gizlilik.html" onclick="openCookieConsent(); return false;" class="text-secondary text-decoration-underline ml-1">Çerez Tercihleri</a>
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
