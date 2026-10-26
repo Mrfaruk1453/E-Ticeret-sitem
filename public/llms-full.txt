@@ -49,8 +49,8 @@ Platform 9 durumlu, 10 izinli geçişe sahip sonlu durum makinesi (Finite State 
     ```json
     {
       "customer": {
-        "name": "Faruk Demir",
-        "email": "faruk@example.com",
+        "name": "Ömer Faruk Üzer",
+        "email": "farukuzer1453@gmail.com",
         "phone": "05551234567",
         "city": "Osmaniye",
         "district": "Merkez",
@@ -58,7 +58,7 @@ Platform 9 durumlu, 10 izinli geçişe sahip sonlu durum makinesi (Finite State 
       },
       "card": {
         "cardNumber": "4532015012345678",
-        "cardHolder": "FARUK DEMIR",
+        "cardHolder": "OMER FARUK UZER",
         "expiry": "12/28",
         "cvv": "123"
       }
@@ -71,5 +71,5 @@ Platform 9 durumlu, 10 izinli geçişe sahip sonlu durum makinesi (Finite State 
 
 ## 4. İletişim & Haklar
 - **Üniversite & Proje:** Osmaniye Korkut Ata Üniversitesi (OKÜ) Bilgisayar Programcılığı E-Ticaret Dersi
-- **Geliştirici:** Faruk Demir
+- **Geliştirici:** Ömer Faruk Üzer (Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı)
 - **Telif Hakları:** MultiShop © 2026. Tüm hakları saklıdır.

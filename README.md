@@ -207,4 +207,4 @@ E-Ticeret-sitem/
 ---
 
 ## 🎓 Akademik Teslimat Notu
-Bu çalışma, Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı Bölümü 2. Sınıf öğrencisi Faruk tarafından dersin tüm yönergelerine ve Şekil 02.1'de tarif edilen durum makinesi kurallarına eksiksiz riayet edilerek hazırlanmıştır.
+Bu çalışma, Osmaniye Korkut Ata Üniversitesi Bilgisayar Programcılığı Bölümü 2. Sınıf öğrencisi Ömer Faruk Üzer tarafından dersin tüm yönergelerine ve Şekil 02.1'de tarif edilen durum makinesi kurallarına eksiksiz riayet edilerek hazırlanmıştır.
