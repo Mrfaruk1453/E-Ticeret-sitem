@@ -10792,3 +10792,35 @@ textarea:focus-visible {
     justify-content: center;
   }
 }
+
+
+/* ==========================================================================
+   PageSpeed Insights & WCAG Accessibility Contrast Polish
+   ========================================================================== */
+.bg-dark, .bg-dark p, .bg-dark .text-secondary {
+  color: #E2E8F0 !important;
+}
+.bg-dark a.text-secondary {
+  color: #E2E8F0 !important;
+  transition: color 0.2s ease;
+}
+.bg-dark a.text-secondary:hover, .bg-dark a.text-secondary:focus {
+  color: #FFD333 !important;
+  text-decoration: underline !important;
+}
+.bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4, .bg-dark h5, .bg-dark h6 {
+  color: #FFFFFF !important;
+}
+.bg-dark .text-muted {
+  color: #CBD5E1 !important;
+}
+.btn-primary, .btn-hero-primary {
+  color: #171717 !important;
+  font-weight: 700 !important;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-hero-primary:hover {
+  color: #000000 !important;
+}
+.text-muted {
+  color: #555555 !important;
+}
