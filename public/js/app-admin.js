@@ -243,7 +243,8 @@ async function loadAdminOrders() {
           document.getElementById('modal-tracking-input').value = `TRK-${Date.now().toString().slice(-6)}`;
           $('#trackingModal').modal('show');
         } else {
-          executeTransition(orderId, toStatus);
+          const existingTracking = localStorage.getItem('admin_order_tracking_' + orderId);
+          executeTransition(orderId, toStatus, { tracking_number: existingTracking });
         }
       });
     });

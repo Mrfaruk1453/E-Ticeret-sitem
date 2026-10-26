@@ -64,7 +64,11 @@ function executeSingleTransition(orderId, toStatus, meta = {}) {
   }
 
   if (toStatus === STATUSES.KARGOLANDI && !meta.tracking_number && !order.tracking_number) {
-    throw new Error('Kargolandı durumuna geçerken kargo takip numarası girilmesi zorunludur.');
+    if (meta.is_catchup) {
+      meta.tracking_number = `TRK-${order.order_number ? order.order_number.replace('ORD-', '') : Date.now().toString().slice(-6)}`;
+    } else {
+      throw new Error('Kargolandı durumuna geçerken kargo takip numarası girilmesi zorunludur.');
+    }
   }
 
   if (toStatus === STATUSES.IADE) {
@@ -158,7 +162,14 @@ function transitionOrder(orderId, toStatus, meta = {}) {
     if (forwardPath && forwardPath.length > 0) {
       let lastResult = null;
       for (const step of forwardPath) {
-        lastResult = executeSingleTransition(orderId, step, meta);
+        const stepMeta = Object.assign({}, meta);
+        if (step !== toStatus) {
+          stepMeta.is_catchup = true;
+          if (!stepMeta.tracking_number && !order.tracking_number) {
+            stepMeta.tracking_number = `TRK-${order.order_number ? order.order_number.replace('ORD-', '') : Date.now().toString().slice(-6)}`;
+          }
+        }
+        lastResult = executeSingleTransition(orderId, step, stepMeta);
       }
       return lastResult;
     }
