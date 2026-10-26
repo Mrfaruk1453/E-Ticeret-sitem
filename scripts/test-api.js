@@ -197,6 +197,27 @@ async function runApiVerification() {
     console.log('================================================================\n');
 
   } finally {
+    try {
+      const { db } = require('../src/config/database');
+      db.prepare(`
+        DELETE FROM order_items WHERE order_id IN (
+          SELECT id FROM orders WHERE customer_name IN ('Test Müşteri', 'Faruk Öğrenci')
+        )
+      `).run();
+      db.prepare(`
+        DELETE FROM order_status_history WHERE order_id IN (
+          SELECT id FROM orders WHERE customer_name IN ('Test Müşteri', 'Faruk Öğrenci')
+        )
+      `).run();
+      db.prepare(`
+        DELETE FROM payments WHERE order_id IN (
+          SELECT id FROM orders WHERE customer_name IN ('Test Müşteri', 'Faruk Öğrenci')
+        )
+      `).run();
+      db.prepare(`
+        DELETE FROM orders WHERE customer_name IN ('Test Müşteri', 'Faruk Öğrenci')
+      `).run();
+    } catch(e) {}
     server.close();
   }
 }
